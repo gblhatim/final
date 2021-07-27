@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
                   .colorScheme
                   .copyWith(primary: Color.fromRGBO(0, 114, 255, 1))),
         );
-        //}
+        //git@github.com:Ainhajar-Ibrahim/avisgo.git}
       },
     );*/
 
