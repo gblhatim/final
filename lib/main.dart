@@ -26,10 +26,10 @@ class MyApp extends StatelessWidget {
                   .colorScheme
                   .copyWith(primary: Color.fromRGBO(0, 114, 255, 1))),
         );
-        //git@github.com:Ainhajar-Ibrahim/avisgo.git}
+        //}
       },
     );*/
-
+/* 1: sms 2:courriel */
     return MaterialApp(
       home: Scaffold(body: Center(child: LoginPage())),
       debugShowCheckedModeBanner: false,
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
               .copyWith(primary: Color.fromRGBO(0, 114, 255, 1))),
     );
   }
-} //testk
+}
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key, required this.title}) : super(key: key);

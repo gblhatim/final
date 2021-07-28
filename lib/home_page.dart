@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 // ignore: camel_case_types
 class AvisGoo extends StatelessWidget {
@@ -22,31 +23,59 @@ class AvisGoo extends StatelessWidget {
                         20, // to apply margin in the cross axis of the wrap
                     alignment: WrapAlignment.center,
                     children: [
-                      FormBuilderChoiceChip(
-                        name: 'radio_group',
-                        decoration: InputDecoration(
-                          labelText: 'Choisir',
-                        ),
-                        options: [
-                          FormBuilderFieldOption(
-                              value: 'Fr', child: Text('Fr')),
-                          FormBuilderFieldOption(
-                              value: 'En', child: Text('En')),
+                      Text(
+                        "Génération des avis 5 étoiles",
+                        style: TextStyle(fontSize: 25.0),
+                      ),
+                      SizedBox(
+                        height: 25.0,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: FormBuilderChoiceChip(
+                              spacing: 5.0,
+                              name: 'radio_group',
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(10.0))),
+                                labelText: 'Choisir',
+                              ),
+                              options: [
+                                FormBuilderFieldOption(
+                                    value: 'Fr', child: Text('Fr')),
+                                FormBuilderFieldOption(
+                                    value: 'En', child: Text('En')),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Expanded(
+                            child: FormBuilderChoiceChip(
+                              spacing: 5.0,
+                              name: 'radio_group',
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(10.0))),
+                                labelText: 'Choisir',
+                              ),
+                              options: [
+                                FormBuilderFieldOption(
+                                    value: 'M', child: Text('M')),
+                                FormBuilderFieldOption(
+                                    value: 'Mme', child: Text('Mme')),
+                              ],
+                            ),
+                          )
                         ],
                       ),
-
-                      FormBuilderChoiceChip(
-                        name: 'radio_group',
-                        decoration: InputDecoration(
-                          labelText: 'Choisir',
-                        ),
-                        options: [
-                          FormBuilderFieldOption(value: 'M', child: Text('M')),
-                          FormBuilderFieldOption(
-                              value: 'Mme', child: Text('Mme')),
-                        ],
+                      SizedBox(
+                        height: 20.0,
                       ),
-
                       FormBuilderTextField(
                         name: 'textfield1',
                         decoration: InputDecoration(
@@ -100,52 +129,46 @@ class AvisGoo extends StatelessWidget {
                           FormBuilderValidators.email(context),
                         ]),
                       ),
-                      SizedBox(height: 20),
-                      RaisedButton(
-                        onPressed: () {
-                          //
-                          if (_formKey.currentState!.saveAndValidate()) {
-                            final formData = _formKey.currentState!.value;
-                            Scaffold.of(context).showSnackBar(
-                              SnackBar(
-                                duration: Duration(seconds: 10),
-                                content: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text('$formData',
-                                          textScaleFactor: 1.5),
-                                    ),
-                                    RaisedButton.icon(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(50)),
-                                      onPressed: () {
-                                        Scaffold.of(context)
-                                            .hideCurrentSnackBar();
-                                      },
-                                      icon: Icon(Icons.close),
-                                      label: Text('Close'),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            );
-                          }
-                        },
-                        child: Text('Submit'),
-                      ),
-                      SizedBox(height: 20),
-                      // Image(
-                      //   height: 300,
-                      //   image: AssetImage(
-                      //       'assets/images/custom_field/change_field_value.png'),
-                      // )
                     ],
                   ),
                 ))
           ],
         ),
       ),
+      floatingActionButton: Container(
+        padding: EdgeInsets.all(20.0),
+        width: double.infinity,
+        child: FloatingActionButton.extended(
+          onPressed: () {
+            if (_formKey.currentState!.saveAndValidate()) {
+              final formData = _formKey.currentState!.value;
+              Scaffold.of(context).showSnackBar(
+                SnackBar(
+                  duration: Duration(seconds: 10),
+                  content: Row(
+                    children: [
+                      Expanded(
+                        child: Text('$formData', textScaleFactor: 1.5),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+          },
+          isExtended: true,
+          materialTapTargetSize: MaterialTapTargetSize.padded,
+          icon: Icon(Icons.send_outlined),
+          label: Text('Envoyer'),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
+
+
+/*
+
+                      
+*/
