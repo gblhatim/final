@@ -1,3 +1,4 @@
+import 'package:app/history_page.dart';
 import 'package:app/home.dart';
 import 'package:app/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
 /* 1: sms 2:courriel */
 /*ana zaml*/
     return MaterialApp(
-      home: Scaffold(body: Center(child: LoginPage())),
+      home: Scaffold(body: Center(child: HomePage())),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           colorScheme: ThemeData.light()
