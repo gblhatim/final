@@ -95,6 +95,8 @@ class AvisGoo extends StatelessWidget {
                       ),
                       FormBuilderTextField(
                         name: 'textfield2',
+                        initialValue: "+1",
+                        maxLength: 12,
                         decoration: InputDecoration(
                             hintText: 'Entrer le numéro de téléphone',
                             hintStyle: TextStyle(fontSize: 12),
@@ -108,7 +110,8 @@ class AvisGoo extends StatelessWidget {
                                     BorderRadius.all(Radius.circular(10.0)))),
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(context),
-                          FormBuilderValidators.numeric(context)
+                          FormBuilderValidators.numeric(context),
+                          FormBuilderValidators.minLength(context, 12),
                         ]),
                       ),
                       FormBuilderTextField(
@@ -125,7 +128,6 @@ class AvisGoo extends StatelessWidget {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10.0)))),
                         validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(context),
                           FormBuilderValidators.email(context),
                         ]),
                       ),
