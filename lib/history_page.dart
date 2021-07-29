@@ -8,7 +8,7 @@ class HistoryPage extends StatelessWidget {
     {"ID": "3", "Name": "CCCCCC", "Date": "12/03/2021", "Type": "SMS"},
     {"ID": "4", "Name": "DDDDDD", "Date": "13/03/2021", "Type": "SMS"},
   ];
-
+/*texst */
   @override
   Widget build(BuildContext context) {
     return Container(
