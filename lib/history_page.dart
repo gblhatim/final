@@ -11,17 +11,39 @@ class HistoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: historyData(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(child: CircularProgressIndicator());
-        }
+        future: historyData(),
+        builder: (context, AsyncSnapshot<List<Fields>> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          }
 
-        if (snapshot.hasData) {}
+          if (snapshot.hasData) {
+            return ListView.builder(
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  List<Widget> historique = [];
 
-        return Center();
-      },
-    );
+                  snapshot.data!.forEach((element) {
+                    print("test");
+                    historique.add(Row(
+                      children: [
+                        Container(
+                          child: Card(
+                            child: Text(element.nom + "" + element.tel),
+                          ),
+                        )
+                      ],
+                    ));
+                  });
+
+                  return Column(
+                    children: historique,
+                  );
+                });
+          }
+
+          return Center();
+        });
   }
 
   /*
@@ -35,9 +57,16 @@ class HistoryPage extends StatelessWidget {
                           DataCell(ElevatedButton(
                               onPressed: historyData, child: Text("test"))),
                         ],
-                      )), */
+                      )), 
+                      
+                      
+                      
+                      
+                      
+                      
+                      */
 
-  Future<List<Map<String, dynamic>>> historyData() async {
+  Future<List<Fields>> historyData() async {
     var settings = new ConnectionSettings(
         host: '10.0.2.2',
         port: 3306,
@@ -45,21 +74,17 @@ class HistoryPage extends StatelessWidget {
         password: 'gbl',
         db: 'lentonn1_pexicom');
     var conn = await MySqlConnection.connect(settings);
-    var userId = 3;
+    var userId = 36;
 
     var results = await conn
         .query('select nom, tele from liste_env where uid = ?', [userId]);
 
-    Map<String, String> map = {};
-    List<Map<String, dynamic>> list = [];
+    List<Fields> list = [];
 
     for (var row in results) {
-      print('Name: ${row[0]}, email: ${row[1]}');
-      map.putIfAbsent("name", () => "${row[0]}");
-      map.putIfAbsent("tel", () => "${row[0]}");
-      print("map:" + map.toString());
+      Fields f = new Fields(nom: "${row[0]}", tel: "${row[1]}");
 
-      list.add(map);
+      list.add(f);
     }
 
     return list;

@@ -1,8 +1,8 @@
-class historyModel {
+class Fields {
   String nom;
   String tel;
 
-  historyModel({
+  Fields({
     required this.nom,
     required this.tel,
   });
