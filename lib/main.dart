@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
       },
     );*/
 /* 1: sms 2:courriel */
-/*ana zaml*/
+
     return MaterialApp(
       home: Scaffold(body: Center(child: HomePage())),
       debugShowCheckedModeBanner: false,
