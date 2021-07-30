@@ -1,12 +1,19 @@
+import 'dart:convert';
+
 import 'package:app/home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:mysql1/mysql1.dart';
+import 'package:crypto/crypto.dart';
+
+import 'models/User.dart';
 
 class LoginPage extends StatelessWidget {
   late BuildContext c;
+  bool userExists = false;
 
   @override
   Widget build(BuildContext context) {
@@ -54,15 +61,21 @@ class LoginPage extends StatelessWidget {
   }
 
 //gbl@gmail.com
-  Future<String> _authUser(LoginData data) {
+
+  Future<String> _authUser(LoginData data) async {
+    Future<User?> f =
+        listconn(data.name, md5.convert(utf8.encode(data.password)).toString());
     return Future.delayed(Duration(seconds: 1)).then((_) {
-      if (/*data.name == "gbl@gmail.com" && data.password == "gbl"*/ true) {
+      if (userExists) {
         Navigator.push(
           c,
           MaterialPageRoute(builder: (context) => HomePage()),
         );
+      } else if (!userExists) {
+        return 'User not exists';
       }
-      return 'User not exists';
+
+      return '';
     });
   }
 
@@ -70,5 +83,40 @@ class LoginPage extends StatelessWidget {
     return Future.delayed(Duration(seconds: 1)).then((_) {
       return 'User not exists';
     });
+  }
+
+  Future<User?> listconn(String email, String password) async {
+    var settings = new ConnectionSettings(
+        host: '10.0.2.2',
+        port: 3306,
+        user: 'root',
+        password: 'gbl',
+        db: 'lentonn1_pexicom');
+    var conn = await MySqlConnection.connect(settings);
+
+    var results = await conn.query(
+        'select nom, email, id, password, etat from connexion_u where email = ? and password = ?',
+        [email, password]);
+
+    /*print("hahha");
+    print(results.isEmpty);*/
+
+    User? f;
+
+    if (results.isNotEmpty) {
+      f = new User(
+          nom: results.single[0].toString(),
+          email: results.single[1].toString(),
+          id: results.single[2].toString(),
+          password: results.single[3].toString(),
+          etat: results.single[4].toString());
+      userExists = true;
+    } else {
+      userExists = false;
+    }
+
+    print(userExists);
+
+    return f;
   }
 }

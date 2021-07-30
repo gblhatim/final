@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
 /* 1: sms 2:courriel */
 
     return MaterialApp(
-      home: Scaffold(body: Center(child: HomePage())),
+      home: Scaffold(body: Center(child: LoginPage())),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           colorScheme: ThemeData.light()
