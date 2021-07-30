@@ -18,32 +18,59 @@ class HistoryPage extends StatelessWidget {
           }
 
           if (snapshot.hasData) {
+            List<Widget> historique = [];
+
             return ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
-                  List<Widget> historique = [];
+                  print(snapshot.data![index].id);
 
-                  snapshot.data!.forEach((element) {
-                    print("test");
-                    historique.add(Row(
-                      children: [
-                        Container(
-                          child: Card(
-                            child: Text(element.nom + "" + element.tel),
-                          ),
-                        )
-                      ],
-                    ));
-                  });
-
-                  return Column(
-                    children: historique,
-                  );
+                  return historyTile(snapshot.data![index], context);
                 });
           }
 
           return Center();
         });
+  }
+
+  Widget historyTile(Fields f, BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(bottom: 2.0),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height / 9,
+        child: Container(
+          padding: EdgeInsets.all(6.0),
+          child: Stack(
+            children: [
+              Positioned(
+                top: 20.0,
+                child: Text(
+                  f.nom,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0,
+                      backgroundColor: Colors.green),
+                ),
+              ),
+              Positioned(
+                top: 40.0,
+                right: 10.0,
+                child: Text(
+                  f.id,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0,
+                      backgroundColor: Colors.green),
+                  textAlign: TextAlign.left,
+                ),
+              )
+            ],
+          ),
+          color: Colors.red,
+        ),
+      ),
+    );
   }
 
   /*
@@ -77,14 +104,18 @@ class HistoryPage extends StatelessWidget {
     var userId = 36;
 
     var results = await conn
-        .query('select nom, tele from liste_env where uid = ?', [userId]);
+        .query('select nom, tele, id from liste_env where uid = ?', [userId]);
 
     List<Fields> list = [];
 
     for (var row in results) {
-      Fields f = new Fields(nom: "${row[0]}", tel: "${row[1]}");
+      Fields f;
+
+      f = new Fields(nom: "${row[0]}", tel: "${row[1]}", id: "${row[2]}");
 
       list.add(f);
+      print("herere");
+      print(list.length);
     }
 
     return list;
