@@ -8,6 +8,8 @@ class AvisGoo extends StatelessWidget {
   final _formKey = GlobalKey<FormBuilderState>();
   @override
   Widget build(BuildContext context) {
+    final bool showFab = MediaQuery.of(context).viewInsets.bottom == 0.0;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
@@ -137,33 +139,35 @@ class AvisGoo extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: Container(
-        padding: EdgeInsets.all(20.0),
-        width: double.infinity,
-        child: FloatingActionButton.extended(
-          onPressed: () {
-            if (_formKey.currentState!.saveAndValidate()) {
-              final formData = _formKey.currentState!.value;
-              Scaffold.of(context).showSnackBar(
-                SnackBar(
-                  duration: Duration(seconds: 10),
-                  content: Row(
-                    children: [
-                      Expanded(
-                        child: Text('$formData', textScaleFactor: 1.5),
+      floatingActionButton: showFab
+          ? Container(
+              padding: EdgeInsets.all(20.0),
+              width: double.infinity,
+              child: FloatingActionButton.extended(
+                onPressed: () {
+                  if (_formKey.currentState!.saveAndValidate()) {
+                    final formData = _formKey.currentState!.value;
+                    Scaffold.of(context).showSnackBar(
+                      SnackBar(
+                        duration: Duration(seconds: 10),
+                        content: Row(
+                          children: [
+                            Expanded(
+                              child: Text('$formData', textScaleFactor: 1.5),
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
-                  ),
-                ),
-              );
-            }
-          },
-          isExtended: true,
-          materialTapTargetSize: MaterialTapTargetSize.padded,
-          icon: Icon(Icons.send_outlined),
-          label: Text('Envoyer'),
-        ),
-      ),
+                    );
+                  }
+                },
+                isExtended: true,
+                materialTapTargetSize: MaterialTapTargetSize.padded,
+                icon: Icon(Icons.send_outlined),
+                label: Text('Envoyer'),
+              ),
+            )
+          : Container(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
