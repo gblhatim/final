@@ -2,6 +2,7 @@ import 'package:app/models/Fields.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mysql1/mysql1.dart';
+import 'package:app/loginlist.dart';
 
 class HistoryPage extends StatelessWidget {
   late final Future<List<dynamic>> listOfColumns;
@@ -73,7 +74,9 @@ class HistoryPage extends StatelessWidget {
         user: 'root',
         password: 'gbl',
         db: 'lentonn1_pexicom');
+
     var conn = await MySqlConnection.connect(settings);
+
     var userId = 36;
 
     var results = await conn
