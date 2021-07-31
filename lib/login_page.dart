@@ -109,7 +109,11 @@ class LoginPage extends StatelessWidget {
           id: results.single[2].toString(),
           password: results.single[3].toString(),
           etat: results.single[4].toString());
-      userExists = true;
+      if (f.etat == '1') {
+        userExists = true;
+      } else {
+        userExists = false;
+      }
 
       return f;
     } else {
