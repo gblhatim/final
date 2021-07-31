@@ -1,9 +1,9 @@
 class User {
-  String nom;
-  String email;
-  String id;
-  String password;
-  String etat;
+  late String nom;
+  late String email;
+  late String id;
+  late String password;
+  late String etat;
 
   User({
     required this.nom,
@@ -12,4 +12,8 @@ class User {
     required this.password,
     required this.etat,
   });
+
+  User.init() {
+    print("init");
+  }
 }

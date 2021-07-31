@@ -28,11 +28,6 @@ class LoginPage extends StatelessWidget {
           hideForgotPasswordButton: true,
           hideSignUpButton: true,
           logoTag: 'assets/logo.png',
-          onSubmitAnimationCompleted: () {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (context) => HomePage(),
-            ));
-          },
           theme: LoginTheme(
               logoWidth: 10.0,
               errorColor: HexColor("#fc5454"),
@@ -63,14 +58,20 @@ class LoginPage extends StatelessWidget {
 //gbl@gmail.com
 
   Future<String> _authUser(LoginData data) async {
-    Future<User?> f =
-        listconn(data.name, md5.convert(utf8.encode(data.password)).toString());
+    User f = await listconn(
+        data.name, md5.convert(utf8.encode(data.password)).toString());
+
+    print("test");
     return Future.delayed(Duration(seconds: 1)).then((_) {
       if (userExists) {
+        /*
         Navigator.push(
           c,
-          MaterialPageRoute(builder: (context) => HomePage()),
-        );
+          MaterialPageRoute(
+              builder: (context) => HomePage(f)),
+        );*/
+        Navigator.of(c)
+            .push(MaterialPageRoute(builder: (context) => HomePage(f)));
       } else if (!userExists) {
         return 'User not exists';
       }
@@ -85,7 +86,7 @@ class LoginPage extends StatelessWidget {
     });
   }
 
-  Future<User?> listconn(String email, String password) async {
+  Future<User> listconn(String email, String password) async {
     var settings = new ConnectionSettings(
         host: '10.0.2.2',
         port: 3306,
@@ -101,22 +102,22 @@ class LoginPage extends StatelessWidget {
     /*print("hahha");
     print(results.isEmpty);*/
 
-    User? f;
-
     if (results.isNotEmpty) {
-      f = new User(
+      User f = new User(
           nom: results.single[0].toString(),
           email: results.single[1].toString(),
           id: results.single[2].toString(),
           password: results.single[3].toString(),
           etat: results.single[4].toString());
       userExists = true;
+
+      return f;
     } else {
+      print("here?");
+      User f = new User.init();
       userExists = false;
+
+      return f;
     }
-
-    print(userExists);
-
-    return f;
   }
 }

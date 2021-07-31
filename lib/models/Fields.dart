@@ -1,11 +1,13 @@
 class Fields {
   String nom;
-  String tel;
+  String date;
   String id;
+  String type;
 
   Fields({
-    required this.nom,
-    required this.tel,
     required this.id,
+    required this.nom,
+    required this.date,
+    required this.type,
   });
 }

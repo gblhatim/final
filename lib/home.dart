@@ -1,25 +1,36 @@
 import 'package:app/history_page.dart';
 import 'package:app/home_page.dart';
+import 'models/User.dart';
 import 'package:app/stats_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 /*hey */
+// ignore: must_be_immutable
 class HomePage extends StatefulWidget {
+  //HomePage({Key? key, @required User}) : super(key: key);
+  final User user;
+  const HomePage(this.user);
+
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 1;
+  late User user1;
 
-  static List<Widget> _pages = <Widget>[
-    StatsPage(),
-    AvisGoo(),
-    HistoryPage(),
-  ];
+  @override
+  HomePage get widget => super.widget;
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> _pages = <Widget>[
+      StatsPage(),
+      AvisGoo(),
+      HistoryPage(user: widget.user),
+    ];
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
