@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:app/databasehelper.dart';
 import 'package:app/home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,12 +9,12 @@ import 'package:flutter_login/flutter_login.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mysql1/mysql1.dart';
 import 'package:crypto/crypto.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'models/User.dart';
 
 class LoginPage extends StatelessWidget {
   late BuildContext c;
-  bool userExists = false;
 
   @override
   Widget build(BuildContext context) {
@@ -58,21 +59,24 @@ class LoginPage extends StatelessWidget {
 //gbl@gmail.com
 
   Future<String> _authUser(LoginData data) async {
-    User f = await listconn(
+    User f = await Databasehelper().listconn(
         data.name, md5.convert(utf8.encode(data.password)).toString());
 
     print("test");
-    return Future.delayed(Duration(seconds: 1)).then((_) {
-      if (userExists) {
-        /*
-        Navigator.push(
-          c,
-          MaterialPageRoute(
-              builder: (context) => HomePage(f)),
-        );*/
+    return Future.delayed(Duration(seconds: 0)).then((_) {
+      if (Databasehelper.userExists) {
+        SharedPreferences.getInstance().then((value) {
+          print("setting loggeding");
+
+          value.setBool("isLoggedIn", true).then((value) => print(value));
+        });
         Navigator.of(c)
             .push(MaterialPageRoute(builder: (context) => HomePage(f)));
-      } else if (!userExists) {
+      } else if (!Databasehelper.userExists) {
+        SharedPreferences.getInstance().then((value) {
+          value.setBool("isLoggedIn", false);
+        });
+
         return 'User not exists';
       }
 
@@ -84,44 +88,5 @@ class LoginPage extends StatelessWidget {
     return Future.delayed(Duration(seconds: 1)).then((_) {
       return 'User not exists';
     });
-  }
-
-  Future<User> listconn(String email, String password) async {
-    var settings = new ConnectionSettings(
-        host: '10.0.2.2',
-        port: 3306,
-        user: 'root',
-        password: 'gbl',
-        db: 'lentonn1_pexicom');
-    var conn = await MySqlConnection.connect(settings);
-
-    var results = await conn.query(
-        'select nom, email, id, password, etat from connexion_u where email = ? and password = ?',
-        [email, password]);
-
-    /*print("hahha");
-    print(results.isEmpty);*/
-
-    if (results.isNotEmpty) {
-      User f = new User(
-          nom: results.single[0].toString(),
-          email: results.single[1].toString(),
-          id: results.single[2].toString(),
-          password: results.single[3].toString(),
-          etat: results.single[4].toString());
-      if (f.etat == '1') {
-        userExists = true;
-      } else {
-        userExists = false;
-      }
-
-      return f;
-    } else {
-      print("here?");
-      User f = new User.init();
-      userExists = false;
-
-      return f;
-    }
   }
 }

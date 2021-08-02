@@ -2,14 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: camel_case_types
 class AvisGoo extends StatelessWidget {
   final _formKey = GlobalKey<FormBuilderState>();
+  late SharedPreferences pref;
+
   @override
   Widget build(BuildContext context) {
     final bool showFab = MediaQuery.of(context).viewInsets.bottom == 0.0;
 
+    print("isLoggedin");
+    print(getLoginStat());
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
@@ -170,6 +175,19 @@ class AvisGoo extends StatelessWidget {
           : Container(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+  }
+
+  bool getLoginStat() {
+    bool isLoggedIn;
+
+    SharedPreferences.getInstance().then((value) {
+      pref = value;
+      isLoggedIn = pref.getBool("isLoggedIn")!;
+
+      return isLoggedIn;
+    });
+
+    return false;
   }
 }
 

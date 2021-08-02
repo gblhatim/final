@@ -3,14 +3,18 @@ import 'package:app/home.dart';
 import 'package:app/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'login_page.dart';
 
-void main() {
+void main() async {
   runApp(MyApp());
 }
 
+/* does sharedpref flutter support ios and android with same base code ?*/
 class MyApp extends StatelessWidget {
+  late SharedPreferences pref;
+
   @override
   Widget build(BuildContext context) {
     /*return FutureBuilder(
@@ -40,6 +44,19 @@ class MyApp extends StatelessWidget {
               .colorScheme
               .copyWith(primary: Color.fromRGBO(0, 114, 255, 1))),
     );
+  }
+
+  bool getLoginStat() {
+    bool isLoggedIn;
+
+    SharedPreferences.getInstance().then((value) {
+      pref = value;
+      isLoggedIn = pref.getBool("isLoggedIn")!;
+
+      return isLoggedIn;
+    });
+
+    return false;
   }
 }
 
