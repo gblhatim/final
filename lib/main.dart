@@ -76,17 +76,10 @@ class _MyHomePageState extends State<MyHomePage> {
       // ignore: unnecessary_null_comparison
       if (isLoggedIn == null) {
         isLoggedIn = false;
-        //persist(_testValue); // set an initial value
       }
       print(isLoggedIn);
       print(uid);
       setState(() {});
-    });
-  }
-
-  void persist(bool value) {
-    setState(() {
-      isLoggedIn = value;
     });
   }
 }
