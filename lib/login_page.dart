@@ -63,7 +63,7 @@ class LoginPage extends StatelessWidget {
         data.name, md5.convert(utf8.encode(data.password)).toString());
 
     print("test");
-    return Future.delayed(Duration(seconds: 0)).then((_) {
+    return Future.delayed(Duration(seconds: 1)).then((_) {
       if (Databasehelper.userExists) {
         SharedPreferences.getInstance().then((value) {
           print("setting loggeding");

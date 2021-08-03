@@ -5,7 +5,7 @@ import 'models/User.dart';
 class Databasehelper {
   static bool userExists = false;
 
-  static ConnectionSettings DataBaseSetting() {
+  static ConnectionSettings dataBaseSetting() {
     var settings = new ConnectionSettings(
         host: '10.0.2.2',
         port: 3306,
@@ -17,7 +17,7 @@ class Databasehelper {
   }
 
   Future<User> listconn(String email, String password) async {
-    var conn = await MySqlConnection.connect(DataBaseSetting());
+    var conn = await MySqlConnection.connect(dataBaseSetting());
 
     var results = await conn.query(
         'select nom, email, id, password, etat from connexion_u where email = ? and password = ?',
@@ -49,7 +49,7 @@ class Databasehelper {
   }
 
   Future<User> listconnid(String id) async {
-    var conn = await MySqlConnection.connect(DataBaseSetting());
+    var conn = await MySqlConnection.connect(dataBaseSetting());
 
     var results = await conn.query(
         'select nom, email, id, password, etat from connexion_u where id = ? ',

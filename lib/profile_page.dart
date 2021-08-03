@@ -1,16 +1,19 @@
+import 'package:app/databasehelper.dart';
+import 'package:app/models/Profiles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:mysql1/mysql1.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+import 'models/User.dart';
 
-  @override
-  _ProfilePageState createState() => _ProfilePageState();
-}
+class ProfilePage extends StatelessWidget {
+  final User user;
+  late Profiles p;
+  ProfilePage({Key? key, required this.user}) : super(key: key);
 
-class _ProfilePageState extends State<ProfilePage> {
   final _formKey = GlobalKey<FormBuilderState>();
-  Widget textfield({@required mcontroller, @required nom}) {
+  Widget textfield(
+      {/*@required mcontroller,*/ @required nom, @required value}) {
     return Material(
       elevation: 4,
       shadowColor: Colors.grey,
@@ -18,8 +21,10 @@ class _ProfilePageState extends State<ProfilePage> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: FormBuilderTextField(
+        readOnly: true,
         name: nom,
-        controller: mcontroller,
+        //controller: mcontroller,
+        initialValue: value,
         decoration: InputDecoration(
             fillColor: Colors.white30,
             filled: true,
@@ -32,7 +37,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final myController = TextEditingController();
+    /*final myController = TextEditingController();
     final myController1 = TextEditingController();
     final myController2 = TextEditingController();
     final myController3 = TextEditingController();
@@ -52,96 +57,89 @@ class _ProfilePageState extends State<ProfilePage> {
       myController5.dispose();
       myController6.dispose();
       myController7.dispose();
-
-      super.dispose();
     }
-
-    return Scaffold(
-        appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Color(0xff555555),
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-            ),
-            onPressed: () {},
-          ),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              FormBuilder(
-                  key: _formKey,
-                  child: Padding(
-                    padding: const EdgeInsets.all(32.0),
-                    child: Wrap(
-                      spacing:
-                          20, // to apply margin in the main axis of the wrap
-                      runSpacing:
-                          20, // to apply margin in the cross axis of the wrap
-                      alignment: WrapAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 25.0,
-                        ),
-                        textfield(
-                          nom: 'nom',
-                          mcontroller: myController,
-                        ),
-                        textfield(
-                          nom: 'société',
-                          mcontroller: myController1,
-                        ),
-                        textfield(
-                          nom: 'phone',
-                          mcontroller: myController2,
-                        ),
-                        textfield(
-                          nom: 'mail',
-                          mcontroller: myController3,
-                        ),
-                        textfield(
-                          nom: '',
-                          mcontroller: myController4,
-                        ),
-                        textfield(
-                          nom: 'ville',
-                          mcontroller: myController5,
-                        ),
-                        textfield(
-                          nom: 'province',
-                          mcontroller: myController6,
-                        ),
-                        textfield(
-                          nom: 'website',
-                          mcontroller: myController7,
-                        ),
-                        Container(
-                          height: 55,
-                          width: double.infinity,
-                          child: RaisedButton(
-                            onPressed: () {},
-                            color: Colors.black54,
-                            child: Center(
-                              child: Text(
-                                "Update",
-                                style: TextStyle(
-                                  fontSize: 23,
-                                  color: Colors.white,
-                                ),
+*/
+    return FutureBuilder(
+        future: listconn(),
+        builder: (context, AsyncSnapshot<Profiles> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          }
+          p = snapshot.data!;
+          return Scaffold(
+              appBar: AppBar(
+                elevation: 0.0,
+                backgroundColor: Color(0xff555555),
+                leading: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {},
+                ),
+              ),
+              body: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    FormBuilder(
+                        key: _formKey,
+                        child: Padding(
+                          padding: const EdgeInsets.all(32.0),
+                          child: Wrap(
+                            spacing:
+                                20, // to apply margin in the main axis of the wrap
+                            runSpacing:
+                                20, // to apply margin in the cross axis of the wrap
+                            alignment: WrapAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 25.0,
                               ),
-                            ),
+                              textfield(nom: 'nom', value: user.nom),
+                              textfield(
+                                  nom: 'société',
+                                  value: p.enom + " - " + p.secteur),
+                              textfield(nom: 'phone', value: p.tele),
+                              textfield(nom: 'mail', value: user.email),
+                              textfield(nom: 'ville', value: p.eadresse),
+                              textfield(
+                                  nom: 'province',
+                                  value: p.eville +
+                                      ", " +
+                                      p.eprovince +
+                                      " - " +
+                                      p.epays),
+                              textfield(
+                                  nom: 'website',
+                                  //mcontroller: myController7,
+                                  value: p.esite),
+                              Container(
+                                height: 55,
+                                width: double.infinity,
+                                child: RaisedButton(
+                                  onPressed: () {},
+                                  color: Colors.black54,
+                                  child: Center(
+                                    child: Text(
+                                      "Update",
+                                      style: TextStyle(
+                                        fontSize: 23,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
-                        )
-                      ],
-                    ),
-                  ))
-            ],
-          ),
-        ));
+                        ))
+                  ],
+                ),
+              ));
+        });
   }
-  /*Future<User> listconn(String email, String password) async {
+
+  Future<Profiles> listconn() async {
     var settings = new ConnectionSettings(
         host: '10.0.2.2',
         port: 3306,
@@ -150,35 +148,36 @@ class _ProfilePageState extends State<ProfilePage> {
         db: 'lentonn1_pexicom');
     var conn = await MySqlConnection.connect(settings);
 
+    var userId = user.id;
+    print(userId);
+
     var results = await conn.query(
-        'select nom, email, id, password, etat from connexion_u where email = ? and password = ?',
-        [email, password]);
+        'select id, enom, eville, eprovince, epays, tele, esite, secteur, eadresse from profil_a where uid = ?',
+        [userId]);
 
     /*print("hahha");
     print(results.isEmpty);*/
 
     if (results.isNotEmpty) {
-      User f = new User(
-          nom: results.single[0].toString(),
-          email: results.single[1].toString(),
-          id: results.single[2].toString(),
-          password: results.single[3].toString(),
-          etat: results.single[4].toString());
-      if (f.etat == '1') {
-        userExists = true;
-      } else {
-        userExists = false;
-      }
+      Profiles p = new Profiles(
+        uid: results.single[0].toString(),
+        enom: results.single[1].toString(),
+        eville: results.single[2].toString(),
+        eprovince: results.single[3].toString(),
+        epays: results.single[4].toString(),
+        tele: results.single[5].toString(),
+        esite: results.single[6].toString(),
+        secteur: results.single[7].toString(),
+        eadresse: results.single[8].toString(),
+      );
+      print(p.uid);
 
-      return f;
+      return p;
     } else {
       print("here?");
-      User f = new User.init();
-      userExists = false;
+      Profiles p = new Profiles.init();
 
-      return f;
+      return p;
     }
   }
-}*/
-
 }

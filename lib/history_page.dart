@@ -171,7 +171,7 @@ class HistoryPage extends StatelessWidget {
 
     var results = await conn.query(
         'select id, nom, date, type_e from liste_env where uid = ?', [userId]);
-
+    conn.close();
     List<Fields> list = [];
 
     for (var row in results) {

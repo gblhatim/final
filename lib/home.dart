@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     List<Widget> _pages = <Widget>[
-      StatsPage(),
+      StatsPage(user: widget.user),
       AvisGoo(),
       HistoryPage(user: widget.user),
     ];

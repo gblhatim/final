@@ -1,15 +1,26 @@
 class Profiles {
-  late String nom;
-  late String email;
-  late String id;
-  late String password;
-  late String etat;
+  late String uid;
+  late String enom;
+  late String eville;
+  late String eprovince;
+  late String epays;
+  late String tele;
+  late String esite;
+  late String secteur;
+  late String eadresse;
 
   Profiles({
-    required this.nom,
-    required this.email,
-    required this.id,
-    required this.password,
-    required this.etat,
+    required this.uid,
+    required this.enom,
+    required this.eadresse,
+    required this.eville,
+    required this.eprovince,
+    required this.epays,
+    required this.tele,
+    required this.esite,
+    required this.secteur,
   });
+  Profiles.init() {
+    print("init");
+  }
 }
