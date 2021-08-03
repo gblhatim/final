@@ -1,3 +1,4 @@
+import 'package:app/profile_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,7 @@ class StatsPage extends StatelessWidget {
       onPressed: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => Loginlist()),
+          MaterialPageRoute(builder: (context) => ProfilePage()),
         );
       },
       child: Text('loginlist'),

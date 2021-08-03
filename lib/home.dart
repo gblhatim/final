@@ -1,5 +1,6 @@
 import 'package:app/history_page.dart';
 import 'package:app/home_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'models/User.dart';
 import 'package:app/stats_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,6 +20,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 1;
   late User user1;
+  late SharedPreferences pref;
 
   @override
   HomePage get widget => super.widget;
@@ -30,7 +32,6 @@ class _HomePageState extends State<HomePage> {
       AvisGoo(),
       HistoryPage(user: widget.user),
     ];
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
