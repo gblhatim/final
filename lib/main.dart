@@ -44,22 +44,27 @@ class _MyHomePageState extends State<MyHomePage> {
   bool isLoggedIn = false;
   String uid = "";
 
+  User u = new User.init();
+
   @override
   Widget build(BuildContext context) {
     //
-
     return Container(
-      child: isLoggedIn ? Text("homepage") : LoginPage(),
+      child: isLoggedIn ? HomePage(getLoggedInUser()) : LoginPage(),
     );
   }
 
   User getLoggedInUser() {
     Databasehelper db = new Databasehelper();
-    User? u;
 
-    db.listconnid(uid).then((value) => u = value);
+    db.listconnid(uid).then((value) {
+      setState(() {
+        u = value;
+      });
+    });
 
-    return u ?? User.init();
+    print(u);
+    return u;
   }
 
   @override

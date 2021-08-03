@@ -1,5 +1,7 @@
 import 'package:app/history_page.dart';
 import 'package:app/home_page.dart';
+import 'package:app/login_page.dart';
+import 'package:app/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'models/User.dart';
 import 'package:app/stats_page.dart';
@@ -54,7 +56,17 @@ class _HomePageState extends State<HomePage> {
           Padding(
               padding: EdgeInsets.only(right: 20.0),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  print("h");
+                  SharedPreferences.getInstance().then((value) {
+                    value.setBool("isLoggedIn", false);
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                MyHomePage(title: "")));
+                  });
+                },
                 child: Icon(
                   Icons.person,
                   size: 26.0,
