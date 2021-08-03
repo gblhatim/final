@@ -8,6 +8,7 @@ import 'package:flutter_login/flutter_login.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mysql1/mysql1.dart';
 import 'package:crypto/crypto.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'models/User.dart';
 
@@ -102,6 +103,7 @@ class LoginPage extends StatelessWidget {
     /*print("hahha");
     print(results.isEmpty);*/
 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     if (results.isNotEmpty) {
       User f = new User(
           nom: results.single[0].toString(),

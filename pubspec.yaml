@@ -30,6 +30,7 @@ dependencies:
   hexcolor: ^2.0.4
   mysql1: ^0.19.2
   twilio_flutter: ^0.0.9
+  shared_preferences: ^0.4.3
 
 dev_dependencies:
   flutter_test:
