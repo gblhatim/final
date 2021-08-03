@@ -15,6 +15,7 @@ import 'models/User.dart';
 
 class LoginPage extends StatelessWidget {
   late BuildContext c;
+  late SharedPreferences pref;
 
   @override
   Widget build(BuildContext context) {
@@ -66,9 +67,11 @@ class LoginPage extends StatelessWidget {
     return Future.delayed(Duration(seconds: 1)).then((_) {
       if (Databasehelper.userExists) {
         SharedPreferences.getInstance().then((value) {
-          print("setting loggeding");
-
-          value.setBool("isLoggedIn", true).then((value) => print(value));
+          value.setBool("isLoggedIn", true).then(
+              (value) => print("setting isloggednin:" + value.toString()));
+          value
+              .setString("UID", f.id)
+              .then((value) => print("setting uid:" + value.toString()));
         });
         Navigator.of(c)
             .push(MaterialPageRoute(builder: (context) => HomePage(f)));

@@ -1,5 +1,7 @@
+import 'package:app/databasehelper.dart';
 import 'package:app/history_page.dart';
 import 'package:app/home.dart';
+import 'package:app/models/User.dart';
 import 'package:app/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
@@ -14,30 +16,15 @@ void main() async {
 /* does sharedpref flutter support ios and android with same base code ?*/
 class MyApp extends StatelessWidget {
   late SharedPreferences pref;
+  late User u = new User.init();
 
   @override
   Widget build(BuildContext context) {
-    /*return FutureBuilder(
-      future: Future.delayed(Duration(seconds: 1)),
-      builder: (context, AsyncSnapshot snapshot) {
-        /*if (snapshot.connectionState == ConnectionState.waiting) {
-          return MaterialApp(home: Splash());
-        } else {*/
-        // Loading is done, return the app:
-        return MaterialApp(
-          home: Scaffold(body: Center(child: LoginPage())),
-          theme: ThemeData(
-              colorScheme: ThemeData.light()
-                  .colorScheme
-                  .copyWith(primary: Color.fromRGBO(0, 114, 255, 1))),
-        );
-        //}
-      },
-    );*/
-/* 1: sms 2:courriel */
-
     return MaterialApp(
-      home: Scaffold(body: Center(child: LoginPage())),
+      home: Scaffold(
+          body: Center(
+              child:
+                  getLoginStat() ? HomePage(getLoggedInUser()) : LoginPage())),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           colorScheme: ThemeData.light()
@@ -47,16 +34,27 @@ class MyApp extends StatelessWidget {
   }
 
   bool getLoginStat() {
-    bool isLoggedIn;
+    bool isLoggedIn = false;
 
     SharedPreferences.getInstance().then((value) {
       pref = value;
-      isLoggedIn = pref.getBool("isLoggedIn")!;
-
-      return isLoggedIn;
     });
 
-    return false;
+    isLoggedIn = pref.getBool("isLoggedIn")!;
+
+    return isLoggedIn;
+  }
+
+  User getLoggedInUser() {
+    Databasehelper db = new Databasehelper();
+
+    SharedPreferences.getInstance().then((value) async {
+      pref = value;
+    });
+
+    db.listconnid(pref.getString("UID")!).then((value) => u = value);
+
+    return u;
   }
 }
 
