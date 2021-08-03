@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app/home.dart';
 import 'package:app/login_page.dart';
 import 'package:flutter/material.dart';
@@ -39,17 +41,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool isLoggedIn = true;
+  bool isLoggedIn = false;
   String uid = "";
 
   @override
   Widget build(BuildContext context) {
-    SharedPreferences.getInstance().then((value) {
-      isLoggedIn = value.getBool("isLoggedIn") ?? false;
-      uid = value.getString("UID") ?? "";
-      print(isLoggedIn);
-      print(uid);
-    });
+    //
 
     return Container(
       child: isLoggedIn ? Text("homepage") : LoginPage(),
@@ -68,5 +65,23 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    SharedPreferences.getInstance().then((value) {
+      isLoggedIn = value.getBool("isLoggedIn") ?? false;
+      uid = value.getString("UID") ?? "";
+      // ignore: unnecessary_null_comparison
+      if (isLoggedIn == null) {
+        isLoggedIn = false;
+        //persist(_testValue); // set an initial value
+      }
+      print(isLoggedIn);
+      print(uid);
+      setState(() {});
+    });
+  }
+
+  void persist(bool value) {
+    setState(() {
+      isLoggedIn = value;
+    });
   }
 }
