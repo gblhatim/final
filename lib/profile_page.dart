@@ -12,8 +12,10 @@ class ProfilePage extends StatelessWidget {
   ProfilePage({Key? key, required this.user}) : super(key: key);
 
   final _formKey = GlobalKey<FormBuilderState>();
-  Widget textfield(
-      {/*@required mcontroller,*/ @required nom, @required value}) {
+  Widget textfield({
+    mcontroller,
+    @required nom,
+  }) {
     return Material(
       elevation: 4,
       shadowColor: Colors.grey,
@@ -21,10 +23,9 @@ class ProfilePage extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: FormBuilderTextField(
-        readOnly: true,
+        readOnly: false,
         name: nom,
-        //controller: mcontroller,
-        initialValue: value,
+        controller: mcontroller,
         decoration: InputDecoration(
             fillColor: Colors.white30,
             filled: true,
@@ -38,11 +39,12 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     /*final myController = TextEditingController();
-    final myController1 = TextEditingController();
-    final myController2 = TextEditingController();
-    final myController3 = TextEditingController();
-    final myController4 = TextEditingController();
-    final myController5 = TextEditingController();
+    final myController1 = TextEditingController(text: user.nom);
+    final myController2 =
+        TextEditingController(text: p.enom + " - " + p.secteur);
+    final myController3 = TextEditingController(text: p.tele);
+    final myController4 = TextEditingController(text: user.email);
+    final myController5 = TextEditingController(text: p.eadresse);
     final myController6 = TextEditingController();
     final myController7 = TextEditingController();
 
@@ -57,8 +59,8 @@ class ProfilePage extends StatelessWidget {
       myController5.dispose();
       myController6.dispose();
       myController7.dispose();
-    }
-*/
+    }*/
+
     return FutureBuilder(
         future: listconn(),
         builder: (context, AsyncSnapshot<Profiles> snapshot) {
@@ -95,24 +97,56 @@ class ProfilePage extends StatelessWidget {
                               SizedBox(
                                 height: 25.0,
                               ),
-                              textfield(nom: 'nom', value: user.nom),
                               textfield(
-                                  nom: 'société',
-                                  value: p.enom + " - " + p.secteur),
-                              textfield(nom: 'phone', value: p.tele),
-                              textfield(nom: 'mail', value: user.email),
-                              textfield(nom: 'ville', value: p.eadresse),
+                                nom: 'nom',
+                                /*value: user.nom*/
+                                mcontroller:
+                                    TextEditingController(text: user.nom),
+                              ),
                               textfield(
-                                  nom: 'province',
-                                  value: p.eville +
+                                nom: 'société',
+                                /*value: p.enom + " - " + p.secteur*/
+                                mcontroller: TextEditingController(
+                                    text: p.enom + " - " + p.secteur),
+                              ),
+                              textfield(
+                                nom: 'phone',
+                                /*value: p.tele*/
+                                mcontroller:
+                                    TextEditingController(text: p.tele),
+                              ),
+                              textfield(
+                                nom: 'mail',
+                                /*value: user.email*/
+                                mcontroller:
+                                    TextEditingController(text: user.email),
+                              ),
+                              textfield(
+                                nom: 'ville',
+                                /* value: p.eadresse*/
+                                mcontroller:
+                                    TextEditingController(text: p.eadresse),
+                              ),
+                              textfield(
+                                nom: 'province',
+                                /*value: p.eville +
                                       ", " +
                                       p.eprovince +
                                       " - " +
-                                      p.epays),
+                                      p.epays*/
+                                mcontroller: TextEditingController(
+                                    text: p.eville +
+                                        ", " +
+                                        p.eprovince +
+                                        " - " +
+                                        p.epays),
+                              ),
                               textfield(
-                                  nom: 'website',
-                                  //mcontroller: myController7,
-                                  value: p.esite),
+                                nom: 'website',
+                                mcontroller:
+                                    TextEditingController(text: p.esite),
+                                /*value: p.esite*/
+                              ),
                               Container(
                                 height: 55,
                                 width: double.infinity,
@@ -179,5 +213,22 @@ class ProfilePage extends StatelessWidget {
 
       return p;
     }
+  }
+
+  Future save() async {
+    var settings = new ConnectionSettings(
+        host: '10.0.2.2',
+        port: 3306,
+        user: 'root',
+        password: 'gbl',
+        db: 'lentonn1_pexicom');
+    var conn = await MySqlConnection.connect(settings);
+
+    var userId = user.id;
+    print(userId);
+
+    /*await conn.query(
+        'update profil_a set tele=?, esite=?, eadresse=? where uid=?',
+        [textfield(nom: "phone")., userId]);*/
   }
 }

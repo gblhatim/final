@@ -1,13 +1,10 @@
-import 'package:app/databasehelper.dart';
-import 'package:app/history_page.dart';
 import 'package:app/home.dart';
-import 'package:app/models/User.dart';
-import 'package:app/splash_screen.dart';
+import 'package:app/login_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_login/flutter_login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'login_page.dart';
+import 'databasehelper.dart';
+import 'models/User.dart';
 
 void main() async {
   runApp(MyApp());
@@ -15,46 +12,20 @@ void main() async {
 
 /* does sharedpref flutter support ios and android with same base code ?*/
 class MyApp extends StatelessWidget {
-  late SharedPreferences pref;
-  late User u = new User.init();
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
           body: Center(
-              child:
-                  getLoginStat() ? HomePage(getLoggedInUser()) : LoginPage())),
+              child: MyHomePage(
+        title: "app",
+      ))),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           colorScheme: ThemeData.light()
               .colorScheme
               .copyWith(primary: Color.fromRGBO(0, 114, 255, 1))),
     );
-  }
-
-  bool getLoginStat() {
-    bool isLoggedIn = false;
-
-    SharedPreferences.getInstance().then((value) {
-      pref = value;
-    });
-
-    isLoggedIn = pref.getBool("isLoggedIn")!;
-
-    return isLoggedIn;
-  }
-
-  User getLoggedInUser() {
-    Databasehelper db = new Databasehelper();
-
-    SharedPreferences.getInstance().then((value) async {
-      pref = value;
-    });
-
-    db.listconnid(pref.getString("UID")!).then((value) => u = value);
-
-    return u;
   }
 }
 
@@ -68,10 +39,34 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool isLoggedIn = true;
+  String uid = "";
+
   @override
   Widget build(BuildContext context) {
+    SharedPreferences.getInstance().then((value) {
+      isLoggedIn = value.getBool("isLoggedIn") ?? false;
+      uid = value.getString("UID") ?? "";
+      print(isLoggedIn);
+      print(uid);
+    });
+
     return Container(
-      child: Text("ji"),
+      child: isLoggedIn ? Text("homepage") : LoginPage(),
     );
+  }
+
+  User getLoggedInUser() {
+    Databasehelper db = new Databasehelper();
+    User? u;
+
+    db.listconnid(uid).then((value) => u = value);
+
+    return u ?? User.init();
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 }
