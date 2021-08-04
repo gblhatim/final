@@ -54,6 +54,12 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   User getLoggedInUser() {
+    Databasehelper db = new Databasehelper();
+
+    db.listconnid(uid).then((value) {
+      u = value;
+    });
+
     return u;
   }
 
@@ -67,13 +73,8 @@ class _MyHomePageState extends State<MyHomePage> {
       if (isLoggedIn == null) {
         isLoggedIn = false;
       }
-      Databasehelper db = new Databasehelper();
-
-      db.listconnid(uid).then((value) {
-        print(value.id);
-      });
-      //u = new User(
-      //nom: "nom", email: "email", id: "36", password: "password", etat: "1");
+      //print(isLoggedIn);
+      //print(uid);
       setState(() {});
     });
   }
