@@ -69,6 +69,8 @@ class Databasehelper {
     } else {
       User f = new User.init();
 
+      print("in db " + f.id);
+
       return f;
     }
   }

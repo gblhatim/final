@@ -1,46 +1,25 @@
-import 'package:app/databasehelper.dart';
-import 'package:app/home.dart';
+/*import 'package:app/databasehelper.dart';
 import 'package:app/models/Profiles.dart';
+import 'package:app/models/textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:mysql1/mysql1.dart';
 
-import 'home_page.dart';
 import 'models/User.dart';
 
 class ProfilePage extends StatelessWidget {
   final User user;
   late Profiles p;
-  static late TextEditingController myController1;
-  static late TextEditingController myController3;
-  static late TextEditingController myController7;
-  static late TextEditingController myController4;
+  var name = new Textield(nom: "nom");
+  var societe = new Textield(nom: "société");
+  var phone = new Textield(nom: "phone");
+  var mail = new Textield(nom: "mail");
+  var ville = new Textield(nom: "ville");
+  var province = new Textield(nom: "province");
+  var website = new Textield(nom: "website");
   ProfilePage({Key? key, required this.user}) : super(key: key);
 
   final _formKey = GlobalKey<FormBuilderState>();
-  static Widget textfield({
-    mcontroller,
-    @required nom,
-  }) {
-    return Material(
-      elevation: 4,
-      shadowColor: Colors.grey,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: FormBuilderTextField(
-        readOnly: false,
-        name: nom,
-        controller: mcontroller,
-        decoration: InputDecoration(
-            fillColor: Colors.white30,
-            filled: true,
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide.none)),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,12 +53,6 @@ class ProfilePage extends StatelessWidget {
             return Center(child: CircularProgressIndicator());
           }
           p = snapshot.data!;
-
-          myController1 = TextEditingController(text: user.nom);
-          myController3 = TextEditingController(text: p.tele);
-          myController7 = TextEditingController(text: p.esite);
-          myController4 = TextEditingController(text: user.email);
-
           return Scaffold(
               appBar: AppBar(
                 elevation: 0.0,
@@ -89,12 +62,7 @@ class ProfilePage extends StatelessWidget {
                     Icons.arrow_back,
                     color: Colors.white,
                   ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage(user)),
-                    );
-                  },
+                  onPressed: () {},
                 ),
               ),
               body: SingleChildScrollView(
@@ -114,59 +82,34 @@ class ProfilePage extends StatelessWidget {
                               SizedBox(
                                 height: 25.0,
                               ),
-                              textfield(
-                                nom: 'nom',
-                                /*value: user.nom*/
-                                mcontroller: myController1,
-                              ),
-                              textfield(
-                                nom: 'société',
-                                /*value: p.enom + " - " + p.secteur*/
-                                mcontroller: TextEditingController(
+                              name.field(
+                                  TextEditingController(text: user.nom))(),
+                              societe.field(
+                                TextEditingController(
                                     text: p.enom + " - " + p.secteur),
                               ),
-                              textfield(
-                                nom: 'phone',
-                                /*value: p.tele*/
-                                mcontroller: myController3,
+                              phone.field(
+                                TextEditingController(text: p.tele),
                               ),
-                              textfield(
-                                nom: 'mail',
-                                /*value: user.email*/
-                                mcontroller: myController4,
+                              mail.field(
+                                  TextEditingController(text: user.email)),
+                              ville.field(
+                                TextEditingController(text: p.eadresse),
                               ),
-                              textfield(
-                                nom: 'ville',
-                                /* value: p.eadresse*/
-                                mcontroller:
-                                    TextEditingController(text: p.eadresse),
-                              ),
-                              textfield(
-                                nom: 'province',
-                                /*value: p.eville +
+                              province.field(TextEditingController(
+                                  text: p.eville +
                                       ", " +
                                       p.eprovince +
                                       " - " +
-                                      p.epays*/
-                                mcontroller: TextEditingController(
-                                    text: p.eville +
-                                        ", " +
-                                        p.eprovince +
-                                        " - " +
-                                        p.epays),
-                              ),
-                              textfield(
-                                nom: 'website',
-                                mcontroller: myController7,
-                                /*value: p.esite*/
-                              ),
+                                      p.epays)),
+                              website
+                                  .field(TextEditingController(text: p.esite)),
                               Container(
                                 height: 55,
                                 width: double.infinity,
                                 child: RaisedButton(
                                   onPressed: () {
                                     save();
-                                    user.nom = myController1.text;
                                   },
                                   color: Colors.black54,
                                   child: Center(
@@ -243,13 +186,7 @@ class ProfilePage extends StatelessWidget {
     var userId = user.id;
     print(userId);
 
-    await conn.query('update profil_a set esite=? where uid=?',
-        [myController7.text, userId]);
-    await conn.query('update profil_a set  tele=? where uid=?',
-        [myController3.text, userId]);
-    await conn.query('update connexion_u set  nom=?, email=?  where id=?',
-        [myController1.text, myController4.text, userId]);
-    /*await conn.query('update connexion_u set  email=?  where id=?',
-        [myController4.text, userId]);*/
+    await conn.query('update profil_a set  esite=? where uid=?',
+        [website.mController.text, userId]);
   }
-}
+}*/
