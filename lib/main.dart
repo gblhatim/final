@@ -77,8 +77,6 @@ class _MyHomePageState extends State<MyHomePage> {
       if (isLoggedIn == null) {
         isLoggedIn = false;
       }
-      print(isLoggedIn);
-      print(uid);
       setState(() {});
     });
   }
