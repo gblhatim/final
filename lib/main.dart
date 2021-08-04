@@ -61,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     SharedPreferences.getInstance().then((value) {
-      isLoggedIn = value.getBool("isLoggedIn") ?? true;
+      isLoggedIn = value.getBool("isLoggedIn") ?? false;
       uid = value.getString("UID") ?? "";
       // ignore: unnecessary_null_comparison
       if (isLoggedIn == null) {
@@ -70,11 +70,9 @@ class _MyHomePageState extends State<MyHomePage> {
       Databasehelper db = new Databasehelper();
 
       db.listconnid(uid).then((value) {
-        print(value.id);
+        u = value;
+        setState(() {});
       });
-      //u = new User(
-      //nom: "nom", email: "email", id: "36", password: "password", etat: "1");
-      setState(() {});
     });
   }
 }
