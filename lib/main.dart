@@ -41,7 +41,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool isLoggedIn = false;
+  late bool isLoggedIn;
   String uid = "";
 
   User u = new User.init();
@@ -77,8 +77,8 @@ class _MyHomePageState extends State<MyHomePage> {
       if (isLoggedIn == null) {
         isLoggedIn = false;
       }
-      print(isLoggedIn);
-      print(uid);
+      //print(isLoggedIn);
+      //print(uid);
       setState(() {});
     });
   }

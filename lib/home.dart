@@ -2,6 +2,7 @@ import 'package:app/history_page.dart';
 import 'package:app/home_page.dart';
 import 'package:app/login_page.dart';
 import 'package:app/main.dart';
+import 'package:app/profile_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'models/User.dart';
 import 'package:app/stats_page.dart';
@@ -10,6 +11,8 @@ import 'package:flutter/material.dart';
 
 /*hey */
 // ignore: must_be_immutable
+enum WhyFarther { deconnexion, profil }
+
 class HomePage extends StatefulWidget {
   //HomePage({Key? key, @required User}) : super(key: key);
   final User user;
@@ -23,6 +26,7 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 1;
   late User user1;
   late SharedPreferences pref;
+  late WhyFarther _selection;
 
   @override
   HomePage get widget => super.widget;
@@ -55,7 +59,53 @@ class _HomePageState extends State<HomePage> {
         actions: [
           Padding(
               padding: EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
+              child: PopupMenuButton<WhyFarther>(
+                onSelected: (WhyFarther result) {
+                  setState(() {
+                    _selection = result;
+                  });
+                },
+                itemBuilder: (BuildContext context) =>
+                    <PopupMenuEntry<WhyFarther>>[
+                  PopupMenuItem<WhyFarther>(
+                    value: WhyFarther.profil,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ProfilePage(user: widget.user)),
+                        );
+                      },
+                      child: Icon(
+                        Icons.person,
+                        size: 26.0,
+                      ),
+                    ),
+                  ),
+                  PopupMenuItem<WhyFarther>(
+                    value: WhyFarther.deconnexion,
+                    child: GestureDetector(
+                      onTap: () {
+                        print("h");
+                        SharedPreferences.getInstance().then((value) {
+                          value.setBool("isLoggedIn", false);
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      MyHomePage(title: "")));
+                        });
+                      },
+                      child: Icon(
+                        Icons.logout,
+                        size: 26.0,
+                      ),
+                    ),
+                  ),
+                ],
+              ) /*GestureDetector(
                 onTap: () {
                   print("h");
                   SharedPreferences.getInstance().then((value) {
@@ -71,7 +121,8 @@ class _HomePageState extends State<HomePage> {
                   Icons.person,
                   size: 26.0,
                 ),
-              )),
+              )*/
+              ),
         ],
       ),
       body: Center(child: _pages.elementAt(_selectedIndex)),
