@@ -57,8 +57,9 @@ class _HomePageState extends State<HomePage> {
         actionsIconTheme:
             IconThemeData(size: 30.0, color: Colors.black, opacity: 10.0),
         actions: [
+          Text("haha"),
           Padding(
-              padding: EdgeInsets.only(right: 20.0),
+              padding: EdgeInsets.only(right: 0.0),
               child: PopupMenuButton<WhyFarther>(
                 onSelected: (WhyFarther result) {
                   setState(() {
@@ -69,8 +70,8 @@ class _HomePageState extends State<HomePage> {
                     <PopupMenuEntry<WhyFarther>>[
                   PopupMenuItem<WhyFarther>(
                     value: WhyFarther.profil,
-                    child: GestureDetector(
-                      onTap: () {
+                    child: MaterialButton(
+                      onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -78,16 +79,22 @@ class _HomePageState extends State<HomePage> {
                                   ProfilePage(user: widget.user)),
                         );
                       },
-                      child: Icon(
-                        Icons.person,
-                        size: 26.0,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.person,
+                            size: 26.0,
+                          ),
+                          Padding(padding: EdgeInsets.only(right: 10.0)),
+                          Text("Mon Profil")
+                        ],
                       ),
                     ),
                   ),
                   PopupMenuItem<WhyFarther>(
                     value: WhyFarther.deconnexion,
-                    child: GestureDetector(
-                      onTap: () {
+                    child: MaterialButton(
+                      onPressed: () {
                         SharedPreferences.getInstance().then((value) {
                           value.setString("UID", "");
                           value.setBool("isLoggedIn", false);
@@ -98,31 +105,20 @@ class _HomePageState extends State<HomePage> {
                                       MyHomePage(title: "")));
                         });
                       },
-                      child: Icon(
-                        Icons.logout,
-                        size: 26.0,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.logout,
+                            size: 26.0,
+                          ),
+                          Padding(padding: EdgeInsets.only(right: 10.0)),
+                          Text("Se déconnecter")
+                        ],
                       ),
                     ),
                   ),
                 ],
-              ) /*GestureDetector(
-                onTap: () {
-                  print("h");
-                  SharedPreferences.getInstance().then((value) {
-                    value.setBool("isLoggedIn", false);
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                MyHomePage(title: "")));
-                  });
-                },
-                child: Icon(
-                  Icons.person,
-                  size: 26.0,
-                ),
-              )*/
-              ),
+              )),
         ],
       ),
       body: Center(child: _pages.elementAt(_selectedIndex)),
