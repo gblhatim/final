@@ -14,6 +14,7 @@ class ProfilePage extends StatelessWidget {
   static late TextEditingController myController1;
   static late TextEditingController myController3;
   static late TextEditingController myController7;
+  static late TextEditingController myController4;
   ProfilePage({Key? key, required this.user}) : super(key: key);
 
   final _formKey = GlobalKey<FormBuilderState>();
@@ -77,6 +78,7 @@ class ProfilePage extends StatelessWidget {
           myController1 = TextEditingController(text: user.nom);
           myController3 = TextEditingController(text: p.tele);
           myController7 = TextEditingController(text: p.esite);
+          myController4 = TextEditingController(text: user.email);
 
           return Scaffold(
               appBar: AppBar(
@@ -131,8 +133,7 @@ class ProfilePage extends StatelessWidget {
                               textfield(
                                 nom: 'mail',
                                 /*value: user.email*/
-                                mcontroller: TextEditingController(
-                                    text: user.email + "test"),
+                                mcontroller: myController4,
                               ),
                               textfield(
                                 nom: 'ville',
@@ -165,6 +166,7 @@ class ProfilePage extends StatelessWidget {
                                 child: RaisedButton(
                                   onPressed: () {
                                     save();
+                                    user.nom = myController1.text;
                                   },
                                   color: Colors.black54,
                                   child: Center(
@@ -245,7 +247,9 @@ class ProfilePage extends StatelessWidget {
         [myController7.text, userId]);
     await conn.query('update profil_a set  tele=? where uid=?',
         [myController3.text, userId]);
-    await conn.query('update connexion_u set  nom=? where id=?',
-        [myController1.text, userId]);
+    await conn.query('update connexion_u set  nom=?, email=?  where id=?',
+        [myController1.text, myController4.text, userId]);
+    /*await conn.query('update connexion_u set  email=?  where id=?',
+        [myController4.text, userId]);*/
   }
 }

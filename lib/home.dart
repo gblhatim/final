@@ -88,8 +88,8 @@ class _HomePageState extends State<HomePage> {
                     value: WhyFarther.deconnexion,
                     child: GestureDetector(
                       onTap: () {
-                        print("h");
                         SharedPreferences.getInstance().then((value) {
+                          value.setString("UID", "");
                           value.setBool("isLoggedIn", false);
                           Navigator.pushReplacement(
                               context,

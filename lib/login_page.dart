@@ -67,6 +67,7 @@ class LoginPage extends StatelessWidget {
     return Future.delayed(Duration(seconds: 1)).then((_) {
       if (Databasehelper.userExists) {
         SharedPreferences.getInstance().then((value) {
+          print("test");
           value.setBool("isLoggedIn", true).then(
               (value) => print("setting isloggednin:" + value.toString()));
           value

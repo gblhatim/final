@@ -11,7 +11,6 @@ class AvisGoo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool showFab = MediaQuery.of(context).viewInsets.bottom != 0.0;
-    print("hahah" + showFab.toString());
 
     return Scaffold(
       resizeToAvoidBottomInset: false,

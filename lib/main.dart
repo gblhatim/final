@@ -41,29 +41,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late bool isLoggedIn;
+  bool isLoggedIn = false;
   String uid = "";
 
   User u = new User.init();
 
   @override
   Widget build(BuildContext context) {
-    //
     return Container(
       child: isLoggedIn ? HomePage(getLoggedInUser()) : LoginPage(),
     );
   }
 
   User getLoggedInUser() {
-    Databasehelper db = new Databasehelper();
-
-    db.listconnid(uid).then((value) {
-      setState(() {
-        u = value;
-      });
-    });
-
-    print(u);
     return u;
   }
 
@@ -71,17 +61,19 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     SharedPreferences.getInstance().then((value) {
-      isLoggedIn = value.getBool("isLoggedIn") ?? false;
+      isLoggedIn = value.getBool("isLoggedIn") ?? true;
       uid = value.getString("UID") ?? "";
       // ignore: unnecessary_null_comparison
       if (isLoggedIn == null) {
         isLoggedIn = false;
       }
-<<<<<<< HEAD
-      //print(isLoggedIn);
-      //print(uid);
-=======
->>>>>>> 9822037fdd6f4694710398d06e2a123b13fd1e0a
+      Databasehelper db = new Databasehelper();
+
+      db.listconnid(uid).then((value) {
+        print(value.id);
+      });
+      //u = new User(
+      //nom: "nom", email: "email", id: "36", password: "password", etat: "1");
       setState(() {});
     });
   }
