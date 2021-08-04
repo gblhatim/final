@@ -77,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
       if (isLoggedIn == null) {
         isLoggedIn = false;
       }
-      setState(() {});
+      //setState(() {});
     });
   }
 }
