@@ -54,12 +54,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   User getLoggedInUser() {
-    Databasehelper db = new Databasehelper();
-
-    db.listconnid(uid).then((value) {
-      u = value;
-    });
-
     return u;
   }
 
@@ -70,21 +64,13 @@ class _MyHomePageState extends State<MyHomePage> {
       isLoggedIn = value.getBool("isLoggedIn") ?? false;
       uid = value.getString("UID") ?? "";
       // ignore: unnecessary_null_comparison
-      if (isLoggedIn == null) {
-        isLoggedIn = false;
-      }
-<<<<<<< HEAD
-      //print(isLoggedIn);
-      //print(uid);
-      setState(() {});
-=======
       Databasehelper db = new Databasehelper();
 
       db.listconnid(uid).then((value) {
+        print(value.id);
         u = value;
         setState(() {});
       });
->>>>>>> 60a5394673496872e36ef92448a03140ff2eccff
     });
   }
 }
