@@ -64,10 +64,6 @@ class _MyHomePageState extends State<MyHomePage> {
       isLoggedIn = value.getBool("isLoggedIn") ?? false;
       uid = value.getString("UID") ?? "";
       // ignore: unnecessary_null_comparison
-<<<<<<< HEAD
-
-=======
->>>>>>> 08968c80a93e40f5350916ffa0571cc8f1718e00
       Databasehelper db = new Databasehelper();
 
       db.listconnid(uid).then((value) {
