@@ -77,8 +77,11 @@ class _MyHomePageState extends State<MyHomePage> {
       if (isLoggedIn == null) {
         isLoggedIn = false;
       }
+<<<<<<< HEAD
       //print(isLoggedIn);
       //print(uid);
+=======
+>>>>>>> 9822037fdd6f4694710398d06e2a123b13fd1e0a
       setState(() {});
     });
   }
