@@ -15,11 +15,13 @@ class ProfilePage extends StatelessWidget {
   static late TextEditingController myController3;
   static late TextEditingController myController7;
   static late TextEditingController myController4;
+  static late TextEditingController myController5;
   ProfilePage({Key? key, required this.user}) : super(key: key);
 
   final _formKey = GlobalKey<FormBuilderState>();
   static Widget textfield({
     mcontroller,
+    icon,
     @required nom,
   }) {
     return Material(
@@ -35,6 +37,7 @@ class ProfilePage extends StatelessWidget {
         decoration: InputDecoration(
             fillColor: Colors.white30,
             filled: true,
+            icon: icon,
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
                 borderSide: BorderSide.none)),
@@ -53,7 +56,6 @@ class ProfilePage extends StatelessWidget {
     final myController5 = TextEditingController(text: p.eadresse);
     final myController6 = TextEditingController();
     final myController7 = TextEditingController();
-
     @override
     void dispose() {
       // Clean up the controller when the widget is disposed.
@@ -79,6 +81,7 @@ class ProfilePage extends StatelessWidget {
           myController3 = TextEditingController(text: p.tele);
           myController7 = TextEditingController(text: p.esite);
           myController4 = TextEditingController(text: user.email);
+          myController5 = TextEditingController(text: p.eadresse);
 
           return Scaffold(
               appBar: AppBar(
@@ -115,51 +118,51 @@ class ProfilePage extends StatelessWidget {
                                 height: 25.0,
                               ),
                               textfield(
-                                nom: 'nom',
-                                /*value: user.nom*/
-                                mcontroller: myController1,
-                              ),
+                                  nom: 'nom',
+                                  /*value: user.nom*/
+                                  mcontroller: myController1,
+                                  icon: Icon(Icons.person)),
                               textfield(
-                                nom: 'société',
-                                /*value: p.enom + " - " + p.secteur*/
-                                mcontroller: TextEditingController(
-                                    text: p.enom + " - " + p.secteur),
-                              ),
+                                  nom: 'société',
+                                  /*value: p.enom + " - " + p.secteur*/
+                                  mcontroller: TextEditingController(
+                                      text: p.enom + " - " + p.secteur),
+                                  icon: Icon(Icons.home_work_rounded)),
                               textfield(
-                                nom: 'phone',
-                                /*value: p.tele*/
-                                mcontroller: myController3,
-                              ),
+                                  nom: 'phone',
+                                  /*value: p.tele*/
+                                  mcontroller: myController3,
+                                  icon: Icon(Icons.phone)),
                               textfield(
-                                nom: 'mail',
-                                /*value: user.email*/
-                                mcontroller: myController4,
-                              ),
+                                  nom: 'mail',
+                                  /*value: user.email*/
+                                  mcontroller: myController4,
+                                  icon: Icon(Icons.mail)),
                               textfield(
-                                nom: 'ville',
-                                /* value: p.eadresse*/
-                                mcontroller:
-                                    TextEditingController(text: p.eadresse),
-                              ),
+                                  nom: 'ville',
+                                  /* value: p.eadresse*/
+                                  mcontroller: myController5,
+                                  icon: Icon(Icons.home)),
                               textfield(
-                                nom: 'province',
-                                /*value: p.eville +
+                                  nom: 'province',
+                                  /*value: p.eville +
                                       ", " +
                                       p.eprovince +
                                       " - " +
                                       p.epays*/
-                                mcontroller: TextEditingController(
-                                    text: p.eville +
-                                        ", " +
-                                        p.eprovince +
-                                        " - " +
-                                        p.epays),
-                              ),
+                                  mcontroller: TextEditingController(
+                                      text: p.eville +
+                                          ", " +
+                                          p.eprovince +
+                                          " - " +
+                                          p.epays),
+                                  icon: Icon(Icons.add_location_rounded)),
                               textfield(
-                                nom: 'website',
-                                mcontroller: myController7,
-                                /*value: p.esite*/
-                              ),
+                                  nom: 'website',
+                                  mcontroller: myController7,
+                                  icon: Icon(Icons.language_rounded)
+                                  /*value: p.esite*/
+                                  ),
                               Container(
                                 height: 55,
                                 width: double.infinity,
@@ -167,6 +170,7 @@ class ProfilePage extends StatelessWidget {
                                   onPressed: () {
                                     save();
                                     user.nom = myController1.text;
+                                    user.email = myController4.text;
                                   },
                                   color: Colors.black54,
                                   child: Center(
@@ -243,10 +247,10 @@ class ProfilePage extends StatelessWidget {
     var userId = user.id;
     print(userId);
 
-    await conn.query('update profil_a set esite=? where uid=?',
-        [myController7.text, userId]);
-    await conn.query('update profil_a set  tele=? where uid=?',
-        [myController3.text, userId]);
+    await conn.query(
+        'update profil_a set esite=?,tele=?,eadresse=? where uid=?',
+        [myController7.text, myController3.text, myController5.text, userId]);
+
     await conn.query('update connexion_u set  nom=?, email=?  where id=?',
         [myController1.text, myController4.text, userId]);
     /*await conn.query('update connexion_u set  email=?  where id=?',

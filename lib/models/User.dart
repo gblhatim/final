@@ -16,4 +16,8 @@ class User {
   User.init() {
     print("init");
   }
+  User.init1() {
+    nom = "";
+    email = "";
+  }
 }

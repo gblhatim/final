@@ -21,6 +21,8 @@ class Profiles {
     required this.secteur,
   });
   Profiles.init() {
-    print("init");
+    tele = "";
+    eadresse = "";
+    esite = "";
   }
 }

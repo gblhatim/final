@@ -77,7 +77,7 @@ class FormTwillio extends StatelessWidget {
             Expanded(
               child: FormBuilderChoiceChip(
                 spacing: 5.0,
-                name: 'radio_group',
+                name: 'radio_group2',
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10.0))),
@@ -165,14 +165,14 @@ class FAButton extends StatelessWidget {
       child: FloatingActionButton.extended(
         onPressed: () {
           if (_formKey.currentState!.saveAndValidate()) {
-            final formData = _formKey.currentState!.value;
+            final formData = _formKey.currentState!.value.values.elementAt(0);
             Scaffold.of(context).showSnackBar(
               SnackBar(
                 duration: Duration(seconds: 10),
                 content: Row(
                   children: [
                     Expanded(
-                      child: Text('$formData', textScaleFactor: 1.5),
+                      child: Text(formData, textScaleFactor: 1.5),
                     ),
                   ],
                 ),
