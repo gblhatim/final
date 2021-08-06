@@ -16,6 +16,8 @@ class ProfilePage extends StatelessWidget {
   static late TextEditingController myController7;
   static late TextEditingController myController4;
   static late TextEditingController myController5;
+  static bool isEditable = false;
+
   ProfilePage({Key? key, required this.user}) : super(key: key);
 
   final _formKey = GlobalKey<FormBuilderState>();
@@ -31,13 +33,12 @@ class ProfilePage extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: FormBuilderTextField(
-        readOnly: false,
+        readOnly: true,
         name: nom,
         controller: mcontroller,
         decoration: InputDecoration(
             fillColor: Colors.white30,
             filled: true,
-            icon: icon,
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
                 borderSide: BorderSide.none)),
@@ -85,12 +86,24 @@ class ProfilePage extends StatelessWidget {
 
           return Scaffold(
               appBar: AppBar(
+                backgroundColor: Colors.white,
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(left: 0.5),
+                      child: Image.asset(
+                        'assets/logo.png',
+                        height: 80,
+                      ),
+                    )
+                  ],
+                ),
                 elevation: 0.0,
-                backgroundColor: Color(0xff555555),
                 leading: IconButton(
                   icon: Icon(
                     Icons.arrow_back,
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
                   onPressed: () {
                     Navigator.push(

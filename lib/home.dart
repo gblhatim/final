@@ -37,7 +37,9 @@ class _HomePageState extends State<HomePage> {
       StatsPage(user: widget.user),
       AvisGoo(),
       HistoryPage(user: widget.user),
+      ProfilePage(user: widget.user)
     ];
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -57,7 +59,6 @@ class _HomePageState extends State<HomePage> {
         actionsIconTheme:
             IconThemeData(size: 30.0, color: Colors.black, opacity: 10.0),
         actions: [
-          Text("haha"),
           Padding(
               padding: EdgeInsets.only(right: 0.0),
               child: PopupMenuButton<WhyFarther>(
