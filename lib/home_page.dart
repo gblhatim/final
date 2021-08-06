@@ -1,11 +1,19 @@
+import 'package:app/databasehelper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'models/message.dart';
+
 // ignore: camel_case_types
-class AvisGoo extends StatelessWidget {
+class AvisGoo extends StatefulWidget {
+  @override
+  _AvisGooState createState() => _AvisGooState();
+}
+
+class _AvisGooState extends State<AvisGoo> {
   final _formKey = GlobalKey<FormBuilderState>();
 
   @override
@@ -20,9 +28,7 @@ class AvisGoo extends StatelessWidget {
             FormBuilder(
                 key: _formKey,
                 child: Padding(
-                  padding: const EdgeInsets.all(32.0),
-                  child: FormTwillio(),
-                ))
+                    padding: const EdgeInsets.all(32.0), child: FormTwillio()))
           ],
         ),
       ),
@@ -77,7 +83,7 @@ class FormTwillio extends StatelessWidget {
             Expanded(
               child: FormBuilderChoiceChip(
                 spacing: 5.0,
-                name: 'radio_group',
+                name: 'radio_group1',
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10.0))),
@@ -148,7 +154,7 @@ class FormTwillio extends StatelessWidget {
   }
 }
 
-class FAButton extends StatelessWidget {
+class FAButton extends StatefulWidget {
   const FAButton({
     Key? key,
     required GlobalKey<FormBuilderState> formKey,
@@ -158,26 +164,36 @@ class FAButton extends StatelessWidget {
   final GlobalKey<FormBuilderState> _formKey;
 
   @override
+  _FAButtonState createState() => _FAButtonState();
+}
+
+class _FAButtonState extends State<FAButton> {
+  @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(20.0),
       width: double.infinity,
       child: FloatingActionButton.extended(
         onPressed: () {
-          if (_formKey.currentState!.saveAndValidate()) {
-            final formData = _formKey.currentState!.value;
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                duration: Duration(seconds: 10),
-                content: Row(
-                  children: [
-                    Expanded(
-                      child: Text('$formData', textScaleFactor: 1.5),
-                    ),
-                  ],
-                ),
-              ),
-            );
+          Message m = new Message.init();
+          /* Databasehelper().getMessage("36").then((value) {
+            m = value;
+            setState(() {});
+          });*/
+
+          if (widget._formKey.currentState!.saveAndValidate()) {
+            final formData = widget._formKey.currentState!.value;
+
+            Databasehelper()
+                .getMessage(
+                    "36",
+                    formData.values.elementAt(3) != "",
+                    formData.values.elementAt(4) != "",
+                    formData.values.elementAt(0))
+                .then((value) {
+              m = value;
+              print(m.getMessage());
+            });
           }
         },
         isExtended: true,
