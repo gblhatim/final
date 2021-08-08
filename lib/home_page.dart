@@ -41,11 +41,16 @@ class _AvisGooState extends State<AvisGoo> {
   }
 }
 
-class FormTwillio extends StatelessWidget {
+class FormTwillio extends StatefulWidget {
   const FormTwillio({
     Key? key,
   }) : super(key: key);
 
+  @override
+  _FormTwillioState createState() => _FormTwillioState();
+}
+
+class _FormTwillioState extends State<FormTwillio> {
   @override
   Widget build(BuildContext context) {
     return Wrap(
@@ -175,6 +180,7 @@ class _FAButtonState extends State<FAButton> {
       width: double.infinity,
       child: FloatingActionButton.extended(
         onPressed: () {
+          setState(() {});
           Message m = new Message.init();
           /* Databasehelper().getMessage("36").then((value) {
             m = value;
@@ -184,16 +190,24 @@ class _FAButtonState extends State<FAButton> {
           if (widget._formKey.currentState!.saveAndValidate()) {
             final formData = widget._formKey.currentState!.value;
 
+            print(formData.values.elementAt(4));
             Databasehelper()
                 .getMessage(
                     "36",
-                    formData.values.elementAt(3) != "",
-                    formData.values.elementAt(4) != "",
+                    formData.values.elementAt(4) != null,
+                    formData.values.elementAt(3) != null,
                     formData.values.elementAt(0))
                 .then((value) {
               m = value;
+
               print(m.getMessage());
             });
+
+            FocusScopeNode currentScope = FocusScope.of(context);
+            if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
+              FocusManager.instance.primaryFocus!.unfocus();
+            }
+            widget._formKey.currentState!.reset();
           }
         },
         isExtended: true,

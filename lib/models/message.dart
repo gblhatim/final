@@ -32,25 +32,52 @@ class Message {
         this.isSMS.toString() +
         " " +
         this.language);
-    switch (this.language) {
-      case "Fr":
-        switch (this.isSMS) {
-          case true:
-            return this.text_s + " " + this.lien;
-          case false:
-            return this.sujet_e + " " + this.text_e + " " + this.lien;
+
+    Map<String, String> message = {};
+    List<Map<String, String>> messages = [];
+
+    switch (this.isEmail) {
+      case false:
+        message.putIfAbsent("type", () => "sms");
+        switch (this.language) {
+          case "En":
+            message.putIfAbsent(
+                "messageSMS", () => this.text_s_en + " " + this.lien);
+            break;
+
+          case "Fr":
+            message.putIfAbsent(
+                "messageSMS", () => this.text_s + " " + this.lien);
+            break;
         }
+
+        messages.add(message);
         break;
 
-      case "En":
-        switch (this.isSMS) {
-          case true:
-            return this.text_s_en + " " + this.lien;
-          case false:
-            return this.sujet_e_en + " " + this.text_e_en + " " + this.lien;
+      case true:
+        message.putIfAbsent("type", () => "both");
+        switch (this.language) {
+          case "En":
+            message.putIfAbsent(
+                "messageSMS", () => this.text_s_en + " " + this.lien);
+            message.putIfAbsent("messageEmail",
+                () => this.sujet_e_en + " " + this.text_e_en + " " + this.lien);
+            break;
+          case "Fr":
+            message.putIfAbsent(
+                "messageSMS", () => this.text_s + " " + this.lien);
+            message.putIfAbsent("messageEmail",
+                () => this.sujet_e + " " + this.text_e + " " + this.lien);
+            break;
         }
+
+        messages.add(message);
         break;
     }
+
+    message.forEach((key, value) {
+      print(key + " : " + value);
+    });
 
     return "";
   }

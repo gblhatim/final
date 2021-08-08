@@ -16,17 +16,30 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-          body: Center(
-              child: MyHomePage(
-        title: "app",
-      ))),
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          colorScheme: ThemeData.light()
-              .colorScheme
-              .copyWith(primary: Color.fromRGBO(0, 114, 255, 1))),
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        print("haha");
+
+        print(currentFocus.hasPrimaryFocus);
+
+        if (!currentFocus.hasPrimaryFocus) {
+          print("haha");
+          currentFocus.unfocus();
+        }
+      },
+      child: MaterialApp(
+        home: Scaffold(
+            body: Center(
+                child: MyHomePage(
+          title: "app",
+        ))),
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+            colorScheme: ThemeData.light()
+                .colorScheme
+                .copyWith(primary: Color.fromRGBO(0, 114, 255, 1))),
+      ),
     );
   }
 }

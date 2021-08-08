@@ -78,6 +78,9 @@ class Databasehelper {
 
   Future<Message> getMessage(
       String id, bool isEmail, bool isSMS, String language) async {
+    print("SMS : " + isSMS.toString());
+    print("Email : " + isEmail.toString());
+    print("Both : " + (isEmail && isSMS).toString());
     var conn = await MySqlConnection.connect(dataBaseSetting());
 
     var results =
@@ -91,11 +94,11 @@ class Databasehelper {
           uid: results.single[1].toString(),
           lien: results.single[2].toString(),
           sujet_e: results.single[3].toString(),
-          sujet_e_en: results.single[4].toString(),
+          sujet_e_en: results.single[6].toString(),
           text_e: results.single[5].toString(),
-          text_e_en: results.single[6].toString(),
-          text_s: results.single[7].toString(),
-          text_s_en: results.single[8].toString(),
+          text_e_en: results.single[8].toString(),
+          text_s: results.single[4].toString(),
+          text_s_en: results.single[7].toString(),
           isEmail: isEmail,
           isSMS: isSMS,
           language: language);
