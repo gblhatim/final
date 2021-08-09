@@ -76,11 +76,7 @@ class Databasehelper {
     }
   }
 
-  Future<Message> getMessage(
-      String id, bool isEmail, bool isSMS, String language) async {
-    print("SMS : " + isSMS.toString());
-    print("Email : " + isEmail.toString());
-    print("Both : " + (isEmail && isSMS).toString());
+  Future<Message> getMessage(String id, bool isEmail, String language) async {
     var conn = await MySqlConnection.connect(dataBaseSetting());
 
     var results =
@@ -100,7 +96,6 @@ class Databasehelper {
           text_s: results.single[4].toString(),
           text_s_en: results.single[7].toString(),
           isEmail: isEmail,
-          isSMS: isSMS,
           language: language);
 
       return m;

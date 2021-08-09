@@ -80,6 +80,9 @@ class _FormTwillioState extends State<FormTwillio> {
                   FormBuilderFieldOption(value: 'Fr', child: Text('Fr')),
                   FormBuilderFieldOption(value: 'En', child: Text('En')),
                 ],
+                validator: FormBuilderValidators.compose([
+                  FormBuilderValidators.required(context),
+                ]),
               ),
             ),
             SizedBox(
@@ -98,6 +101,9 @@ class _FormTwillioState extends State<FormTwillio> {
                   FormBuilderFieldOption(value: 'M', child: Text('M')),
                   FormBuilderFieldOption(value: 'Mme', child: Text('Mme')),
                 ],
+                validator: FormBuilderValidators.compose([
+                  FormBuilderValidators.required(context),
+                ]),
               ),
             )
           ],
@@ -189,24 +195,34 @@ class _FAButtonState extends State<FAButton> {
 
           if (widget._formKey.currentState!.saveAndValidate()) {
             final formData = widget._formKey.currentState!.value;
+            dynamic s = formData.values.elementAt(4);
+
+            print("s : " + s.toString());
+            bool isEmail;
+            if (s == "" || s == null)
+              isEmail = false;
+            else
+              isEmail = true;
+
+            print("isEmail: " + isEmail.toString());
 
             print(formData.values.elementAt(4));
             Databasehelper()
-                .getMessage(
-                    "36",
-                    formData.values.elementAt(4) != null,
-                    formData.values.elementAt(3) != null,
-                    formData.values.elementAt(0))
+                .getMessage("36", isEmail, formData.values.elementAt(0))
                 .then((value) {
               m = value;
 
               print(m.getMessage());
+
+              m.getMessage().forEach((key, value) {});
             });
 
             FocusScopeNode currentScope = FocusScope.of(context);
             if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
               FocusManager.instance.primaryFocus!.unfocus();
             }
+
+            s = null;
             widget._formKey.currentState!.reset();
           }
         },

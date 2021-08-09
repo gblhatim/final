@@ -9,7 +9,6 @@ class Message {
   late String text_s;
   late String text_s_en;
   late bool isEmail;
-  late bool isSMS;
   late String language;
 
   Message(
@@ -23,18 +22,10 @@ class Message {
       required this.text_s,
       required this.text_s_en,
       required this.isEmail,
-      required this.isSMS,
       required this.language});
 
-  String getMessage() {
-    print(this.isEmail.toString() +
-        " " +
-        this.isSMS.toString() +
-        " " +
-        this.language);
-
+  Map<String, String> getMessage() {
     Map<String, String> message = {};
-    List<Map<String, String>> messages = [];
 
     switch (this.isEmail) {
       case false:
@@ -51,7 +42,6 @@ class Message {
             break;
         }
 
-        messages.add(message);
         break;
 
       case true:
@@ -71,15 +61,10 @@ class Message {
             break;
         }
 
-        messages.add(message);
         break;
     }
 
-    message.forEach((key, value) {
-      print(key + " : " + value);
-    });
-
-    return "";
+    return message;
   }
 
   Message.init() {

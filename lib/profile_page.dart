@@ -3,24 +3,215 @@ import 'package:app/home.dart';
 import 'package:app/models/Profiles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_switch/flutter_switch.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:mysql1/mysql1.dart';
 
 import 'home_page.dart';
 import 'models/User.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   final User user;
+
+  ProfilePage({Key? key, required this.user}) : super(key: key);
+
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
   late Profiles p;
-  static late TextEditingController myController1;
+  static bool isEditable = false;
+
+  late TextEditingController myController1;
   static late TextEditingController myController3;
   static late TextEditingController myController7;
   static late TextEditingController myController4;
   static late TextEditingController myController5;
-  static bool isEditable = false;
-
-  ProfilePage({Key? key, required this.user}) : super(key: key);
-
   final _formKey = GlobalKey<FormBuilderState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        actions: [],
+        backgroundColor: Colors.white,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.only(left: 0.5),
+              child: Image.asset(
+                'assets/logo.png',
+                height: 80,
+              ),
+            )
+          ],
+        ),
+        elevation: 0.0,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage(widget.user)),
+            );
+          },
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 32.0, left: 32.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Vos informations :",
+                    style: TextStyle(
+                      fontSize: 26.0,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 32.0, right: 32.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text("Modifier"),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  FlutterSwitch(
+                      activeText: "Edit",
+                      value: isEditable,
+                      height: 25,
+                      width: 50,
+                      onToggle: (val) {
+                        setState(() {
+                          isEditable = val;
+                        });
+                      })
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 32.0, top: 32.0),
+              child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                isEditable
+                    ? MaterialButton(
+                        onPressed: () {
+                          save();
+                          widget.user.nom = myController1.text;
+                          widget.user.email = myController4.text;
+                        },
+                        color: HexColor("#0072ff"),
+                        child: Center(
+                          child: Text(
+                            "Modifier",
+                            style: TextStyle(
+                              fontSize: 17,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(),
+              ]),
+            ),
+            FutureBuilder(
+                future: listconn(),
+                builder: (context, AsyncSnapshot<Profiles> snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  p = snapshot.data!;
+
+                  myController1 = TextEditingController(text: widget.user.nom);
+                  myController3 = TextEditingController(text: p.tele);
+                  myController7 = TextEditingController(text: p.esite);
+                  myController4 =
+                      TextEditingController(text: widget.user.email);
+                  myController5 = TextEditingController(text: p.eadresse);
+
+                  return Column(
+                    children: [
+                      FormBuilder(
+                          key: _formKey,
+                          child: Padding(
+                            padding: const EdgeInsets.all(32.0),
+                            child: Wrap(
+                              spacing:
+                                  20, // to apply margin in the main axis of the wrap
+                              runSpacing:
+                                  20, // to apply margin in the cross axis of the wrap
+                              alignment: WrapAlignment.center,
+                              children: [
+                                textfield(
+                                  nom: 'nom',
+                                  /*value: user.nom*/
+                                  mcontroller: myController1,
+                                  icon: Icons.person,
+                                ),
+                                textfield(
+                                    nom: 'société',
+                                    /*value: p.enom + " - " + p.secteur*/
+                                    mcontroller: TextEditingController(
+                                        text: p.enom + " - " + p.secteur),
+                                    icon: Icons.home_work_rounded),
+                                textfield(
+                                    nom: 'phone',
+                                    /*value: p.tele*/
+                                    mcontroller: myController1,
+                                    icon: Icons.phone),
+                                textfield(
+                                    nom: 'mail',
+                                    /*value: user.email*/
+                                    mcontroller: myController4,
+                                    icon: Icons.mail),
+                                textfield(
+                                    nom: 'ville',
+                                    /* value: p.eadresse*/
+                                    mcontroller: myController5,
+                                    icon: Icons.home),
+                                textfield(
+                                    nom: 'province',
+                                    /*value: p.eville +
+                                      ", " +
+                                      p.eprovince +
+                                      " - " +
+                                      p.epays*/
+                                    mcontroller: TextEditingController(
+                                        text: p.eville +
+                                            ", " +
+                                            p.eprovince +
+                                            " - " +
+                                            p.epays),
+                                    icon: Icons.add_location_rounded),
+                                textfield(
+                                    nom: 'website',
+                                    mcontroller: myController7,
+                                    icon: Icons.language_rounded
+                                    /*value: p.esite*/
+                                    ),
+                              ],
+                            ),
+                          )),
+                    ],
+                  );
+                })
+          ],
+        ),
+      ),
+    );
+  }
+
   static Widget textfield({
     mcontroller,
     icon,
@@ -33,10 +224,12 @@ class ProfilePage extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: FormBuilderTextField(
-        readOnly: true,
+        readOnly: !isEditable,
         name: nom,
         controller: mcontroller,
         decoration: InputDecoration(
+            prefixIcon: Icon(icon, color: HexColor("#0072ff")),
+            prefixStyle: TextStyle(),
             fillColor: Colors.white30,
             filled: true,
             border: OutlineInputBorder(
@@ -44,166 +237,6 @@ class ProfilePage extends StatelessWidget {
                 borderSide: BorderSide.none)),
       ),
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    /*final myController = TextEditingController();
-    final myController1 = TextEditingController(text: user.nom);
-    final myController2 =
-        TextEditingController(text: p.enom + " - " + p.secteur);
-    final myController3 = TextEditingController(text: p.tele);
-    final myController4 = TextEditingController(text: user.email);
-    final myController5 = TextEditingController(text: p.eadresse);
-    final myController6 = TextEditingController();
-    final myController7 = TextEditingController();
-    @override
-    void dispose() {
-      // Clean up the controller when the widget is disposed.
-      myController.dispose();
-      myController1.dispose();
-      myController2.dispose();
-      myController3.dispose();
-      myController4.dispose();
-      myController5.dispose();
-      myController6.dispose();
-      myController7.dispose();
-    }*/
-
-    return FutureBuilder(
-        future: listconn(),
-        builder: (context, AsyncSnapshot<Profiles> snapshot) {
-          if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
-          }
-          p = snapshot.data!;
-
-          myController1 = TextEditingController(text: user.nom);
-          myController3 = TextEditingController(text: p.tele);
-          myController7 = TextEditingController(text: p.esite);
-          myController4 = TextEditingController(text: user.email);
-          myController5 = TextEditingController(text: p.eadresse);
-
-          return Scaffold(
-              appBar: AppBar(
-                backgroundColor: Colors.white,
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.only(left: 0.5),
-                      child: Image.asset(
-                        'assets/logo.png',
-                        height: 80,
-                      ),
-                    )
-                  ],
-                ),
-                elevation: 0.0,
-                leading: IconButton(
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage(user)),
-                    );
-                  },
-                ),
-              ),
-              body: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    FormBuilder(
-                        key: _formKey,
-                        child: Padding(
-                          padding: const EdgeInsets.all(32.0),
-                          child: Wrap(
-                            spacing:
-                                20, // to apply margin in the main axis of the wrap
-                            runSpacing:
-                                20, // to apply margin in the cross axis of the wrap
-                            alignment: WrapAlignment.center,
-                            children: [
-                              SizedBox(
-                                height: 25.0,
-                              ),
-                              textfield(
-                                  nom: 'nom',
-                                  /*value: user.nom*/
-                                  mcontroller: myController1,
-                                  icon: Icon(Icons.person)),
-                              textfield(
-                                  nom: 'société',
-                                  /*value: p.enom + " - " + p.secteur*/
-                                  mcontroller: TextEditingController(
-                                      text: p.enom + " - " + p.secteur),
-                                  icon: Icon(Icons.home_work_rounded)),
-                              textfield(
-                                  nom: 'phone',
-                                  /*value: p.tele*/
-                                  mcontroller: myController3,
-                                  icon: Icon(Icons.phone)),
-                              textfield(
-                                  nom: 'mail',
-                                  /*value: user.email*/
-                                  mcontroller: myController4,
-                                  icon: Icon(Icons.mail)),
-                              textfield(
-                                  nom: 'ville',
-                                  /* value: p.eadresse*/
-                                  mcontroller: myController5,
-                                  icon: Icon(Icons.home)),
-                              textfield(
-                                  nom: 'province',
-                                  /*value: p.eville +
-                                      ", " +
-                                      p.eprovince +
-                                      " - " +
-                                      p.epays*/
-                                  mcontroller: TextEditingController(
-                                      text: p.eville +
-                                          ", " +
-                                          p.eprovince +
-                                          " - " +
-                                          p.epays),
-                                  icon: Icon(Icons.add_location_rounded)),
-                              textfield(
-                                  nom: 'website',
-                                  mcontroller: myController7,
-                                  icon: Icon(Icons.language_rounded)
-                                  /*value: p.esite*/
-                                  ),
-                              Container(
-                                height: 55,
-                                width: double.infinity,
-                                child: RaisedButton(
-                                  onPressed: () {
-                                    save();
-                                    user.nom = myController1.text;
-                                    user.email = myController4.text;
-                                  },
-                                  color: Colors.black54,
-                                  child: Center(
-                                    child: Text(
-                                      "Update",
-                                      style: TextStyle(
-                                        fontSize: 23,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ))
-                  ],
-                ),
-              ));
-        });
   }
 
   Future<Profiles> listconn() async {
@@ -215,7 +248,7 @@ class ProfilePage extends StatelessWidget {
         db: 'lentonn1_pexicom');
     var conn = await MySqlConnection.connect(settings);
 
-    var userId = user.id;
+    var userId = widget.user.id;
     print(userId);
 
     var results = await conn.query(
@@ -257,12 +290,12 @@ class ProfilePage extends StatelessWidget {
         db: 'lentonn1_pexicom');
     var conn = await MySqlConnection.connect(settings);
 
-    var userId = user.id;
+    var userId = widget.user.id;
     print(userId);
 
     await conn.query(
         'update profil_a set esite=?,tele=?,eadresse=? where uid=?',
-        [myController7.text, myController3.text, myController5.text, userId]);
+        [myController7.text, myController1.text, myController5.text, userId]);
 
     await conn.query('update connexion_u set  nom=?, email=?  where id=?',
         [myController1.text, myController4.text, userId]);
