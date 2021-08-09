@@ -5,10 +5,17 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'models/User.dart';
 import 'models/message.dart';
+
+bool isSent = false;
 
 // ignore: camel_case_types
 class AvisGoo extends StatefulWidget {
+  final User user;
+
+  AvisGoo({Key? key, required this.user}) : super(key: key);
+
   @override
   _AvisGooState createState() => _AvisGooState();
 }
@@ -34,7 +41,10 @@ class _AvisGooState extends State<AvisGoo> {
       ),
       floatingActionButton: Visibility(
         visible: MediaQuery.of(context).viewInsets.bottom == 0.0,
-        child: FAButton(formKey: _formKey),
+        child: FAButton(
+          formKey: _formKey,
+          user: widget.user,
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
@@ -169,10 +179,13 @@ class FAButton extends StatefulWidget {
   const FAButton({
     Key? key,
     required GlobalKey<FormBuilderState> formKey,
+    required User user,
   })  : _formKey = formKey,
+        _user = user,
         super(key: key);
 
   final GlobalKey<FormBuilderState> _formKey;
+  final User _user;
 
   @override
   _FAButtonState createState() => _FAButtonState();
@@ -188,33 +201,36 @@ class _FAButtonState extends State<FAButton> {
         onPressed: () {
           setState(() {});
           Message m = new Message.init();
-          /* Databasehelper().getMessage("36").then((value) {
-            m = value;
-            setState(() {});
-          });*/
 
           if (widget._formKey.currentState!.saveAndValidate()) {
             final formData = widget._formKey.currentState!.value;
             dynamic s = formData.values.elementAt(4);
 
-            print("s : " + s.toString());
             bool isEmail;
             if (s == "" || s == null)
               isEmail = false;
             else
               isEmail = true;
 
-            print("isEmail: " + isEmail.toString());
-
-            print(formData.values.elementAt(4));
             Databasehelper()
-                .getMessage("36", isEmail, formData.values.elementAt(0))
+                .getMessage(
+                    widget._user.id, isEmail, formData.values.elementAt(0))
                 .then((value) {
               m = value;
 
-              print(m.getMessage());
+              Map<String, String> message = m.getMessage();
 
-              m.getMessage().forEach((key, value) {});
+              String messageSMS = message.values.elementAt(1);
+              String messageEMAIL = message.values.elementAt(2);
+
+              if (message.values.elementAt(0) == "sms") {
+                // send via twilio
+
+              } else {
+                //send via twilio and email
+              }
+
+              // addto history on message sent
             });
 
             FocusScopeNode currentScope = FocusScope.of(context);
@@ -234,7 +250,6 @@ class _FAButtonState extends State<FAButton> {
     );
   }
 }
-
 
 /*
                       

@@ -11,14 +11,6 @@ class StatsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => ProfilePage(user: this.user)),
-        );
-      },
-      child: Text('loginlist'),
-    );
+    return Center(child: Text("Stats Page"));
   }
 }

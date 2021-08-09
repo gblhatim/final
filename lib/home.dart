@@ -35,9 +35,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     List<Widget> _pages = <Widget>[
       StatsPage(user: widget.user),
-      AvisGoo(),
+      AvisGoo(user: widget.user),
       HistoryPage(user: widget.user),
-      ProfilePage(user: widget.user)
     ];
 
     return Scaffold(

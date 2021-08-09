@@ -1,6 +1,7 @@
 import 'package:app/models/message.dart';
 import 'package:mysql1/mysql1.dart';
 
+import 'models/Fields.dart';
 import 'models/User.dart';
 
 class Databasehelper {
@@ -104,5 +105,37 @@ class Databasehelper {
 
       return m;
     }
+  }
+
+  Future<List<Fields>> historyData(String id) async {
+    var settings = new ConnectionSettings(
+        host: '10.0.2.2',
+        port: 3306,
+        user: 'root',
+        password: 'gbl',
+        db: 'lentonn1_pexicom');
+
+    var conn = await MySqlConnection.connect(settings);
+
+    var userId = id;
+
+    var results = await conn.query(
+        'select id, nom, date, type_e from liste_env where uid = ?', [userId]);
+    conn.close();
+    List<Fields> list = [];
+
+    for (var row in results) {
+      Fields f;
+
+      f = new Fields(
+          id: "${row[0]}",
+          nom: "${row[1]}",
+          date: "${row[2]}",
+          type: "${row[3]}");
+
+      list.add(f);
+    }
+
+    return list;
   }
 }
