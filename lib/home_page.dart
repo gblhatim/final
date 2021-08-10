@@ -1,9 +1,12 @@
 import 'package:app/databasehelper.dart';
+import 'package:app/models/Fields.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:twilio_flutter/twilio_flutter.dart';
+import 'package:intl/intl.dart';
 
 import 'models/User.dart';
 import 'models/message.dart';
@@ -192,6 +195,12 @@ class FAButton extends StatefulWidget {
 }
 
 class _FAButtonState extends State<FAButton> {
+  TwilioFlutter twilioFlutter = TwilioFlutter(
+      accountSid: '*************************', // replace *** with Account SID
+      authToken: 'xxxxxxxxxxxxxxxxxx', // replace xxx with Auth Token
+      twilioNumber: '+...............' // replace .... with Twilio Number
+      );
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -220,13 +229,30 @@ class _FAButtonState extends State<FAButton> {
 
               Map<String, String> message = m.getMessage();
 
-              String messageSMS = message.values.elementAt(1);
-              String messageEMAIL = message.values.elementAt(2);
-
               if (message.values.elementAt(0) == "sms") {
-                // send via twilio
+                String messageSMS = message.values.elementAt(1);
+                print(messageSMS);
+                /*  twilioFlutter.sendSMS(
+                    toNumber: formData.values.elementAt(4),
+                    messageBody: messageSMS);*/
 
+                final DateTime now = DateTime.now();
+                final DateFormat formatter = DateFormat('yyyy-MM-dd');
+                final String formatted = formatter.format(now);
+                Fields2 f = new Fields2(
+                    id: "id",
+                    uid: widget._user.id,
+                    genre: formData.values.elementAt(1),
+                    nom: formData.values.elementAt(2),
+                    tele: formData.values.elementAt(3),
+                    email: formData.values.elementAt(4) ?? "",
+                    date: formatted,
+                    type: "1");
+
+                Databasehelper().addHistory(f, widget._user.id);
               } else {
+                String messageEMAIL = message.values.elementAt(2);
+
                 //send via twilio and email
               }
 

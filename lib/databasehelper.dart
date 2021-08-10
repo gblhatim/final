@@ -108,14 +108,7 @@ class Databasehelper {
   }
 
   Future<List<Fields>> historyData(String id) async {
-    var settings = new ConnectionSettings(
-        host: '10.0.2.2',
-        port: 3306,
-        user: 'root',
-        password: 'gbl',
-        db: 'lentonn1_pexicom');
-
-    var conn = await MySqlConnection.connect(settings);
+    var conn = await MySqlConnection.connect(dataBaseSetting());
 
     var userId = id;
 
@@ -137,5 +130,21 @@ class Databasehelper {
     }
 
     return list;
+  }
+
+  Future addHistory(Fields2 f, String id) async {
+    var conn = await MySqlConnection.connect(dataBaseSetting());
+
+    var result = await conn.query(
+        'insert into liste_env (uid, genre, nom, tele, email, date, type_e) values (?, ?, ?, ?, ?, ?, ?)',
+        [
+          f.uid,
+          f.genre,
+          f.nom,
+          f.tele,
+          f.email,
+          f.date,
+          f.type,
+        ]);
   }
 }
