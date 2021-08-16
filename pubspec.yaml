@@ -32,13 +32,13 @@ dependencies:
   twilio_flutter: ^0.0.9
   shared_preferences: ^2.0.6
   flutter_switch: ^0.3.2
-  flutter_email_sender: ^5.0.2
   google_fonts: ^2.1.0
+  flutter_launcher_icons: "^0.9.1"
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: "^0.9.1"
 
 flutter_icons:
   android: true
