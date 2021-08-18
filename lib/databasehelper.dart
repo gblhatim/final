@@ -9,10 +9,10 @@ class Databasehelper {
 
   static ConnectionSettings dataBaseSetting() {
     var settings = new ConnectionSettings(
-        host: '10.0.2.2',
-        port: 3306,
-        user: 'root',
-        password: 'gbl',
+        host: 'https://lentonnoir.com/config/config.php',
+        //port: 3306,
+        user: 'lentonn1_ulaby',
+        password: 'L1B3n3RgU1',
         db: 'lentonn1_pexicom');
 
     return settings;

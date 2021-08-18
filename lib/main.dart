@@ -1,5 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
-
+import 'package:http/http.dart' as http;
 import 'package:app/home.dart';
 import 'package:app/login_page.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +55,27 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: isLoggedIn ? HomePage(getLoggedInUser()) : LoginPage(),
+      child: MaterialButton(
+        onPressed: () async {
+          final queryParameters = {
+            'apicall': 'getUser',
+            'email': ';',
+            'password': 'b bb'
+          };
+
+          final uri = Uri.https('10.0.2.2', '/api.php', queryParameters);
+          print(uri);
+
+          await http
+              .get(
+                uri,
+              )
+              .then((value) => print(value))
+              .onError((error, stackTrace) => print(error))
+              .timeout(Duration(seconds: 3));
+        },
+        child: Text('test'),
+      ),
     );
   }
 
