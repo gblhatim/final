@@ -28,6 +28,8 @@ class apiService {
   Future<User> getUserbyID(
     String id,
   ) async {
+    User f = new User.init();
+
     final response = await http.post(
       Uri.parse(
           "https://pexicom.com/avisgoo/avigoapi/api.php?apicall=getUserbyID"),
@@ -38,19 +40,42 @@ class apiService {
       encoding: Encoding.getByName('utf-8'),
     );
 
+    print(response.body);
+    bool error = json.decode(response.body)["error"];
     var user = json.decode(response.body)["user"];
+    // stopped at implement userexists from old dbhelper
 
-    User u = new User(
-        nom: user["nom"].toString(),
-        email: user["email"].toString(),
-        id: user["id"].toString(),
-        password: "",
-        etat: user["etat"].toString());
+    print(error);
 
-    return u;
+    if (error == false) {
+      if (user != []) {
+        User u = new User(
+            nom: user["nom"].toString(),
+            email: user["email"].toString(),
+            id: user["id"].toString(),
+            password: "",
+            etat: user["etat"].toString());
+        if (u.etat == '1') {
+          userExists = true;
+        } else {
+          userExists = false;
+        }
+
+        return u;
+      }
+    } else {
+      User f = new User.init();
+      userExists = false;
+
+      return f;
+    }
+
+    return f;
   }
 
   Future<User> getUser(String email, String password) async {
+    User f = new User.init();
+
     final response = await http.post(
       Uri.parse("https://pexicom.com/avisgoo/avigoapi/api.php?apicall=getUser"),
       body: {"email": email, "password": password},
@@ -60,17 +85,37 @@ class apiService {
       encoding: Encoding.getByName('utf-8'),
     );
 
+    print(response.body);
+    bool error = json.decode(response.body)["error"];
     var user = json.decode(response.body)["user"];
     // stopped at implement userexists from old dbhelper
 
-    User u = new User(
-        nom: user["nom"].toString(),
-        email: user["email"].toString(),
-        id: user["id"].toString(),
-        password: "",
-        etat: user["etat"].toString());
+    print(error);
 
-    return u;
+    if (error == false) {
+      if (user != []) {
+        User u = new User(
+            nom: user["nom"].toString(),
+            email: user["email"].toString(),
+            id: user["id"].toString(),
+            password: "",
+            etat: user["etat"].toString());
+        if (u.etat == '1') {
+          userExists = true;
+        } else {
+          userExists = false;
+        }
+
+        return u;
+      }
+    } else {
+      User f = new User.init();
+      userExists = false;
+
+      return f;
+    }
+
+    return f;
   }
 
   Future<List<Fields>> getHistory(String uid) async {

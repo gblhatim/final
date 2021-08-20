@@ -61,12 +61,10 @@ class LoginPage extends StatelessWidget {
 //gbl@gmail.com
 
   Future<String> _authUser(LoginData data) async {
-
-    User f = await apiService().getUser(data.name, md5.convert(utf8.encode(data.password)).toString())
+    User f = await apiService().getUser(data.name, data.password);
 //this is messed up not completed yet
-    print("test");
     return Future.delayed(Duration(seconds: 1)).then((_) {
-      if (Databasehelper.userExists) {
+      if (apiService.userExists) {
         SharedPreferences.getInstance().then((value) {
           print("test");
           value.setBool("isLoggedIn", true).then(
@@ -77,7 +75,7 @@ class LoginPage extends StatelessWidget {
         });
         Navigator.of(c)
             .push(MaterialPageRoute(builder: (context) => HomePage(f)));
-      } else if (!Databasehelper.userExists) {
+      } else if (!apiService.userExists) {
         SharedPreferences.getInstance().then((value) {
           value.setBool("isLoggedIn", false);
         });

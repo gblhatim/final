@@ -62,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: isLoggedIn ? HomePage(getLoggedInUser()) : LoginPage()
         /*MaterialButton(
         onPressed: () async {
-          print(u);
+          apiService().getUser("info@laby.ca", "laby@2585");
         },
         child: Text('test'),
       ),*/
@@ -72,9 +72,6 @@ class _MyHomePageState extends State<MyHomePage> {
   User getLoggedInUser() {
     return u;
   }
-
-  /*
- */
 
   @override
   void initState() {
@@ -86,17 +83,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
       apiService d = new apiService();
 
-      d.getUserbyID("36").then((value) {
-        u = value;
-        setState(() {});
-      });
-/*      Databasehelper db = new Databasehelper();
-
-      db.listconnid(uid).then((value) {
-        print(value.id);
-        u = value;
-        setState(() {});
-      });*/
+      if (uid != "") {
+        d.getUserbyID(uid).then((value) {
+          u = value;
+          setState(() {});
+        });
+      }
     });
   }
 }
