@@ -1,3 +1,4 @@
+import 'package:app/apiService.dart';
 import 'package:app/databasehelper.dart';
 import 'package:app/home.dart';
 import 'package:app/models/Profiles.dart';
@@ -112,7 +113,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   isEditable
                       ? MaterialButton(
                           onPressed: () {
-                            save();
+                            apiService().updateProfile(
+                                widget.user.id,
+                                myController7.text,
+                                myController5.text,
+                                myController3.text);
                             widget.user.nom = myController1.text;
                             widget.user.email = myController4.text;
                           },
@@ -131,7 +136,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ]),
               ),
               FutureBuilder(
-                  future: listconn(),
+                  future: apiService().getProfile(widget.user.id),
                   builder: (context, AsyncSnapshot<Profiles> snapshot) {
                     if (!snapshot.hasData) {
                       return Center(child: CircularProgressIndicator());

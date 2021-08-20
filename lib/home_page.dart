@@ -1,3 +1,4 @@
+import 'package:app/apiService.dart';
 import 'package:app/databasehelper.dart';
 import 'package:app/models/Fields.dart';
 import 'package:flutter/cupertino.dart';
@@ -256,7 +257,7 @@ class _FAButtonState extends State<FAButton> {
               else
                 isEmail = true;
 
-              Databasehelper()
+              apiService()
                   .getMessage(
                       widget._user.id, isEmail, formData.values.elementAt(0))
                   .then((value) {
@@ -324,8 +325,7 @@ class _FAButtonState extends State<FAButton> {
                     date: formatted,
                     type: typebd == "sms" ? "1" : "3");
 
-                Databasehelper().addHistory(f, widget._user.id);
-
+                apiService().addHistory(f);
                 // addto history on message sent
               });
 

@@ -1,3 +1,4 @@
+import 'package:app/apiService.dart';
 import 'package:app/databasehelper.dart';
 import 'package:app/models/Fields.dart';
 import 'package:app/models/User.dart';
@@ -16,7 +17,7 @@ class HistoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: Databasehelper().historyData(user.id),
+        future: apiService().getHistory(user.id),
         builder: (context, AsyncSnapshot<List<Fields>> snapshot) {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
