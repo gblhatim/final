@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:app/apiService.dart';
 import 'package:app/databasehelper.dart';
 import 'package:app/home.dart';
 import 'package:flutter/cupertino.dart';
@@ -60,9 +61,9 @@ class LoginPage extends StatelessWidget {
 //gbl@gmail.com
 
   Future<String> _authUser(LoginData data) async {
-    User f = await Databasehelper().listconn(
-        data.name, md5.convert(utf8.encode(data.password)).toString());
 
+    User f = await apiService().getUser(data.name, md5.convert(utf8.encode(data.password)).toString())
+//this is messed up not completed yet
     print("test");
     return Future.delayed(Duration(seconds: 1)).then((_) {
       if (Databasehelper.userExists) {

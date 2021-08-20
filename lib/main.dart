@@ -1,10 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:app/apiService.dart';
+import 'package:app/models/Fields.dart';
+import 'package:app/models/Profiles.dart';
 import 'package:http/http.dart' as http;
 import 'package:app/home.dart';
 import 'package:app/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mysql1/mysql1.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'databasehelper.dart';
@@ -55,33 +59,22 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: MaterialButton(
+        child: isLoggedIn ? HomePage(getLoggedInUser()) : LoginPage()
+        /*MaterialButton(
         onPressed: () async {
-          final queryParameters = {
-            'apicall': 'getUser',
-            'email': ';',
-            'password': 'b bb'
-          };
-
-          final uri = Uri.https('10.0.2.2', '/api.php', queryParameters);
-          print(uri);
-
-          await http
-              .get(
-                uri,
-              )
-              .then((value) => print(value))
-              .onError((error, stackTrace) => print(error))
-              .timeout(Duration(seconds: 3));
+          print(u);
         },
         child: Text('test'),
-      ),
-    );
+      ),*/
+        );
   }
 
   User getLoggedInUser() {
     return u;
   }
+
+  /*
+ */
 
   @override
   void initState() {
@@ -90,13 +83,20 @@ class _MyHomePageState extends State<MyHomePage> {
       isLoggedIn = value.getBool("isLoggedIn") ?? false;
       uid = value.getString("UID") ?? "";
       // ignore: unnecessary_null_comparison
-      Databasehelper db = new Databasehelper();
+
+      apiService d = new apiService();
+
+      d.getUserbyID("36").then((value) {
+        u = value;
+        setState(() {});
+      });
+/*      Databasehelper db = new Databasehelper();
 
       db.listconnid(uid).then((value) {
         print(value.id);
         u = value;
         setState(() {});
-      });
+      });*/
     });
   }
 }

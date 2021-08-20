@@ -13,6 +13,10 @@ class User {
     required this.etat,
   });
 
+  User.fromJson(Map<String, dynamic> json)
+      : nom = json['nom'],
+        email = json['email'];
+
   User.init() {
     print("init");
   }
