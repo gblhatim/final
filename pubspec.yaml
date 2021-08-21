@@ -28,7 +28,6 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   hexcolor: ^2.0.4
-  mysql1: ^0.19.2
   twilio_flutter: ^0.0.9
   shared_preferences: ^2.0.6
   flutter_switch: ^0.3.2

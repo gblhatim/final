@@ -1,23 +1,21 @@
-import 'package:app/apiService.dart';
-import 'package:app/models/Colorstheme.dart';
-import 'package:app/profile_page.dart';
+import 'package:app/helpers/apiService.dart';
+import 'package:app/models/Fields.dart';
+import 'package:app/models/User.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mysql1/mysql1.dart';
 
-import 'loginlist.dart';
-import 'models/Fields.dart';
-import 'models/User.dart';
-
-class StatsPage extends StatelessWidget {
+class HistoryPage extends StatelessWidget {
   final User user;
-  const StatsPage({Key? key, required this.user}) : super(key: key);
+  bool extended = false;
+  HistoryPage({Key? key, required this.user}) : super(key: key);
+
+  /*ret*/
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: apiService().getstat(user.id),
-        builder: (context, AsyncSnapshot<List<String>> snapshot) {
+        future: apiService().getHistory(user.id),
+        builder: (context, AsyncSnapshot<List<Fields>> snapshot) {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           }
@@ -26,7 +24,7 @@ class StatsPage extends StatelessWidget {
             return ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
-                  return historyTile(snapshot.data![index], index, context);
+                  return historyTile(snapshot.data![index], context);
                 });
           }
 
@@ -34,7 +32,7 @@ class StatsPage extends StatelessWidget {
         });
   }
 
-  Widget historyTile(String nbr, int genre, BuildContext context) {
+  Widget historyTile(Fields f, BuildContext context) {
     return Padding(
       padding:
           const EdgeInsets.only(left: 10.0, right: 10.0, top: 9.0, bottom: 9.0),
@@ -47,40 +45,46 @@ class StatsPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(right: 30),
                 child: Column(
-                  children: [iconType(genre)],
+                  children: [iconType(f.type)],
                 ),
               ),
-              Column(
+              Row(
                 children: [
-                  Row(
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        name(genre),
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
+                      Text("HID : "),
+                      Text("Nom : "),
+                      Text("Date : "),
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          nbr + " envoyés au total",
+                          f.id,
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          f.nom,
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          f.date,
                           textAlign: TextAlign.center,
                         )
                       ],
                     ),
-                  ),
+                  )
                 ],
-              ),
+              )
             ],
           ),
         ),
         decoration: BoxDecoration(
-          color: Colorth.white,
+          color: Colors.white,
           borderRadius: BorderRadius.all(
             Radius.circular(7.0),
           ),
@@ -101,20 +105,20 @@ class StatsPage extends StatelessWidget {
     );
   }
 
-  Widget iconType(int f) {
-    if (f == 0)
+  Widget iconType(String f) {
+    if (f == "1")
       return Image.asset(
         "assets/sms.png",
         height: 50.0,
         width: 50.0,
       );
-    if (f == 1)
+    if (f == "2")
       return Image.asset(
         "assets/email.png",
         height: 50.0,
         width: 50.0,
       );
-    if (f == 2)
+    if (f == "3")
       return Image.asset(
         "assets/both.png",
         height: 50.0,
@@ -122,52 +126,5 @@ class StatsPage extends StatelessWidget {
       );
 
     return Center();
-  }
-
-  String name(int f) {
-    if (f == 0) {
-      return "SMS";
-    }
-    if (f == 1) {
-      return "Courriels";
-    }
-    return "";
-  }
-
-  Future<List<String>> statData() async {
-    var settings = new ConnectionSettings(
-        host: '10.0.2.2',
-        port: 3306,
-        user: 'root',
-        password: 'gbl',
-        db: 'lentonn1_pexicom');
-
-    var conn = await MySqlConnection.connect(settings);
-
-    var userId = user.id;
-
-    var resultse = await conn.query(
-        'select count(*) from liste_env where uid = ? AND type_e = ?',
-        [userId, '3']);
-    var resultss = await conn.query(
-        'select count(*) from liste_env where uid = ? AND type_e = ?',
-        [userId, '1']);
-    conn.close();
-    List<String> list = [];
-    String counts = "0";
-    String counte = "0";
-    for (var row in resultse) {
-      counte = "${row[0]}";
-      print("email " + counte);
-      list.add(counte);
-    }
-    for (var row in resultss) {
-      counts = "${row[0]}";
-      counts = (int.parse(counts) + int.parse(counte)).toString();
-      print("sms " + counts);
-      list.add(counts);
-    }
-
-    return list;
   }
 }

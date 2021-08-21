@@ -1,17 +1,8 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:app/apiService.dart';
-import 'package:app/models/Fields.dart';
-import 'package:app/models/Profiles.dart';
-import 'package:http/http.dart' as http;
+import 'package:app/helpers/apiService.dart';
 import 'package:app/home.dart';
-import 'package:app/login_page.dart';
+import 'package:app/page/login_page.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:mysql1/mysql1.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'databasehelper.dart';
 import 'models/Colorstheme.dart';
 import 'models/User.dart';
 

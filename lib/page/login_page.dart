@@ -1,18 +1,13 @@
-import 'dart:convert';
-
-import 'package:app/apiService.dart';
-import 'package:app/databasehelper.dart';
+import 'package:app/helpers/apiService.dart';
 import 'package:app/home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:mysql1/mysql1.dart';
-import 'package:crypto/crypto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'models/User.dart';
+import '../models/User.dart';
 
 class LoginPage extends StatelessWidget {
   late BuildContext c;

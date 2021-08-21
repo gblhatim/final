@@ -1,35 +1,27 @@
-import 'package:app/apiService.dart';
-import 'package:app/databasehelper.dart';
-import 'package:app/models/Fields.dart';
-import 'package:app/models/User.dart';
+import 'package:app/helpers/apiService.dart';
+import 'package:app/models/Colorstheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mysql1/mysql1.dart';
-import 'package:app/loginlist.dart';
+import '../models/User.dart';
 
-class HistoryPage extends StatelessWidget {
+class StatsPage extends StatelessWidget {
   final User user;
-  bool extended = false;
-  HistoryPage({Key? key, required this.user}) : super(key: key);
-
-  /*ret*/
+  const StatsPage({Key? key, required this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: apiService().getHistory(user.id),
-        builder: (context, AsyncSnapshot<List<Fields>> snapshot) {
+        future: apiService().getstat(user.id),
+        builder: (context, AsyncSnapshot<List<String>> snapshot) {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           }
 
           if (snapshot.hasData) {
-            List<Widget> historique = [];
-
             return ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
-                  return historyTile(snapshot.data![index], context);
+                  return historyTile(snapshot.data![index], index, context);
                 });
           }
 
@@ -37,7 +29,7 @@ class HistoryPage extends StatelessWidget {
         });
   }
 
-  Widget historyTile(Fields f, BuildContext context) {
+  Widget historyTile(String nbr, int genre, BuildContext context) {
     return Padding(
       padding:
           const EdgeInsets.only(left: 10.0, right: 10.0, top: 9.0, bottom: 9.0),
@@ -50,46 +42,40 @@ class HistoryPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(right: 30),
                 child: Column(
-                  children: [iconType(f.type)],
+                  children: [iconType(genre)],
                 ),
               ),
-              Row(
+              Column(
                 children: [
-                  Column(
+                  Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("HID : "),
-                      Text("Nom : "),
-                      Text("Date : "),
+                      Text(
+                        name(genre),
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
-                    child: Column(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          f.id,
-                          textAlign: TextAlign.center,
-                        ),
-                        Text(
-                          f.nom,
-                          textAlign: TextAlign.center,
-                        ),
-                        Text(
-                          f.date,
+                          nbr + " envoyés au total",
                           textAlign: TextAlign.center,
                         )
                       ],
                     ),
-                  )
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Colorth.white,
           borderRadius: BorderRadius.all(
             Radius.circular(7.0),
           ),
@@ -110,20 +96,20 @@ class HistoryPage extends StatelessWidget {
     );
   }
 
-  Widget iconType(String f) {
-    if (f == "1")
+  Widget iconType(int f) {
+    if (f == 0)
       return Image.asset(
         "assets/sms.png",
         height: 50.0,
         width: 50.0,
       );
-    if (f == "2")
+    if (f == 1)
       return Image.asset(
         "assets/email.png",
         height: 50.0,
         width: 50.0,
       );
-    if (f == "3")
+    if (f == 2)
       return Image.asset(
         "assets/both.png",
         height: 50.0,
@@ -131,5 +117,15 @@ class HistoryPage extends StatelessWidget {
       );
 
     return Center();
+  }
+
+  String name(int f) {
+    if (f == 0) {
+      return "SMS";
+    }
+    if (f == 1) {
+      return "Courriels";
+    }
+    return "";
   }
 }

@@ -4,36 +4,21 @@ import 'package:app/models/Profiles.dart';
 import 'package:app/models/message.dart';
 import 'package:http/http.dart' as http;
 
-import 'models/Fields.dart';
-import 'models/User.dart';
+import '../models/Fields.dart';
+import '../models/User.dart';
 
 // ignore: camel_case_types
 class apiService {
   static bool userExists = false;
-
-  /* Future<String> apiDynamic(Object? body, String apicall) async {
-    final response = await http.post(
-      Uri.parse(
-          "https://pexicom.com/avisgoo/avigoapi/api.php?apicall=" + apicall),
-      body: body,
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      encoding: Encoding.getByName('utf-8'),
-    );
-
-    return response.body;
-  }
-}*/
-
+  String url = "https://pexicom.com/avisgoo/avigoapi/api.php?apicall=";
+  //
   Future<User> getUserbyID(
     String id,
   ) async {
     User f = new User.init();
 
     final response = await http.post(
-      Uri.parse("http://localhost/api.php?apicall=getUserbyID"),
-      //"https://pexicom.com/avisgoo/avigoapi/api.php?apicall=getUserbyID"),
+      Uri.parse(url + "getUserbyID"),
       body: {"id": id},
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -78,8 +63,7 @@ class apiService {
     User f = new User.init();
 
     final response = await http.post(
-      Uri.parse(//"https://pexicom.com/avisgoo/avigoapi/api.php?apicall=getUser"
-          "http://localhost/api.php?apicall=getUser"),
+      Uri.parse(url + "getUser"),
       body: {"email": email, "password": password},
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -122,9 +106,7 @@ class apiService {
 
   Future<List<Fields>> getHistory(String uid) async {
     final response = await http.post(
-      Uri.parse(
-          //"https://pexicom.com/avisgoo/avigoapi/api.php?apicall=getHistory"
-          "http://localhost/api.php?apicall=getHistory"),
+      Uri.parse(url + "getHistory"),
       body: {"uid": uid},
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -148,9 +130,7 @@ class apiService {
 
   Future<Profiles> getProfile(String uid) async {
     final response = await http.post(
-      Uri.parse("http://localhost/api.php?apicall=getProfile"
-          //"https://pexicom.com/avisgoo/avigoapi/api.php?apicall=getProfile"
-          ),
+      Uri.parse(url + "getProfile"),
       body: {"uid": uid},
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -176,9 +156,7 @@ class apiService {
 
   Future<bool> addHistory(Fields2 f) async {
     final response = await http.post(
-      Uri.parse(
-          //"https://pexicom.com/avisgoo/avigoapi/api.php?apicall=addHistory"
-          "http://localhost/api.php?apicall=addHistory"),
+      Uri.parse(url + "addHistory"),
       body: {
         "uid": f.uid,
         "genre": f.genre,
@@ -199,9 +177,7 @@ class apiService {
 
   Future<Message> getMessage(String uid, bool isEmail, String language) async {
     final response = await http.post(
-      Uri.parse(
-          //"https://pexicom.com/avisgoo/avigoapi/api.php?apicall=getMessage"
-          "http://localhost/api.php?apicall=getMessage"),
+      Uri.parse(url + "getMessage"),
       body: {"uid": uid},
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -229,9 +205,7 @@ class apiService {
 
   Future<bool> updateProfile(String a1, String a2, String a3, String a4) async {
     final response = await http.post(
-      Uri.parse(
-          //"https://pexicom.com/avisgoo/avigoapi/api.php?apicall=updateProfile"
-          "http://localhost/api.php?apicall=updateProfile"),
+      Uri.parse(url + "updateProfile"),
       body: {"uid": a1, "esite": a2, "eadresse": a3, "tele": a4},
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -244,9 +218,7 @@ class apiService {
 
   Future<List<String>> getstat(dynamic id) async {
     final response = await http.post(
-      Uri.parse(
-          //"https://pexicom.com/avisgoo/avigoapi/api.php?apicall=getMessage"
-          "http://localhost/api.php?apicall=stat"),
+      Uri.parse(url + "stat"),
       body: {"uid": id, "type_e": "1"},
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -255,9 +227,7 @@ class apiService {
     );
 
     final responsetot = await http.post(
-      Uri.parse(
-          //"https://pexicom.com/avisgoo/avigoapi/api.php?apicall=getMessage"
-          "http://localhost/api.php?apicall=stat"),
+      Uri.parse(url + "stat"),
       body: {"uid": id, "type_e": "3"},
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -281,31 +251,3 @@ class apiService {
     return list;
   }
 }
-
-/*
-switch (apicall) {
-        case "getUser":
-          Map<String, dynamic> user = json.decode(value.body)["user"];
-
-          User u = new User(
-              nom: user["nom"].toString(),
-              email: user["email"].toString(),
-              id: user["id"].toString(),
-              password: "",
-              etat: user["etat"].toString());
-
-          return u;
-        case "getHistory":
-          Map<String, dynamic> history = json.decode(value.body)["history"];
-
-          List<Fields> h = [];
-          history.values.forEach((element) {
-            h.add(new Fields(
-                id: element["id"].toString(),
-                nom: element["nom"].toString(),
-                date: element["date"].toString(),
-                type: element["type"].toString()));
-          });
-
-          return h;
-      }*/

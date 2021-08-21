@@ -1,16 +1,14 @@
-import 'package:app/apiService.dart';
-import 'package:app/databasehelper.dart';
+import 'package:app/helpers/apiService.dart';
 import 'package:app/models/Fields.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:twilio_flutter/twilio_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
-import 'models/User.dart';
-import 'models/Colorstheme.dart';
-import 'models/message.dart';
+import '../models/User.dart';
+import '../models/Colorstheme.dart';
+import '../models/message.dart';
 
 bool isSent = false;
 
@@ -235,8 +233,6 @@ class _FAButtonState extends State<FAButton> {
 
   @override
   Widget build(BuildContext context) {
-    final bool showFab = MediaQuery.of(context).viewInsets.bottom == 0.0;
-
     return Container(
       padding: EdgeInsets.all(20.0),
       width: double.infinity,
@@ -269,15 +265,25 @@ class _FAButtonState extends State<FAButton> {
                 if (typebd == "sms") {
                   String messageSMS = message.values.elementAt(1);
                   print(messageSMS);
-                  twilioFlutter.sendSMS(
-                      toNumber: formData.values.elementAt(3),
-                      messageBody: messageSMS);
+
+                  twilioFlutter
+                      .sendSMS(
+                          toNumber: formData.values.elementAt(4),
+                          messageBody: messageSMS)
+                      .whenComplete(
+                          () => ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("SMS envoyé!"),
+                                ),
+                              ));
                 } else {
                   String messageSMS = message.values.elementAt(1);
                   String messageEMAIL = message.values.elementAt(2);
                   String subject = message.values.elementAt(3);
+
                   print(messageSMS);
                   print(messageEMAIL);
+
                   Future<void> send() async {
                     final Email email = Email(
                       body: messageEMAIL,
@@ -290,31 +296,34 @@ class _FAButtonState extends State<FAButton> {
 
                     try {
                       await FlutterEmailSender.send(email);
-                      platformResponse = 'success';
+                      platformResponse = 'Email envoye!';
                     } catch (error) {
                       platformResponse = error.toString();
                     }
 
                     if (!mounted) return;
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(platformResponse),
-                      ),
-                    );
                   }
 
                   send();
 
-                  /*  twilioFlutter.sendSMS(
-                      toNumber: formData.values.elementAt(4),
-                      messageBody: messageSMS);*/
+                  twilioFlutter
+                      .sendSMS(
+                          toNumber: formData.values.elementAt(4),
+                          messageBody: messageSMS)
+                      .whenComplete(
+                          () => ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("SMS envoyé!"),
+                                ),
+                              ));
 
                   //send via twilio and email
                 }
+
                 final DateTime now = DateTime.now();
                 final DateFormat formatter = DateFormat('yyyy-MM-dd');
                 final String formatted = formatter.format(now);
+
                 Fields2 f = new Fields2(
                     id: "id",
                     uid: widget._user.id,

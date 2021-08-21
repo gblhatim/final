@@ -1,16 +1,11 @@
-import 'package:app/apiService.dart';
-import 'package:app/databasehelper.dart';
+import 'package:app/helpers/apiService.dart';
 import 'package:app/home.dart';
 import 'package:app/models/Profiles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import 'package:hexcolor/hexcolor.dart';
-import 'package:mysql1/mysql1.dart';
-
-import 'home_page.dart';
-import 'models/Colorstheme.dart';
-import 'models/User.dart';
+import '../models/Colorstheme.dart';
+import '../models/User.dart';
 
 class ProfilePage extends StatefulWidget {
   final User user;
@@ -118,12 +113,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 myController7.text,
                                 myController5.text,
                                 myController3.text);
-<<<<<<< HEAD
-
-=======
                             widget.user.nom = myController1.text;
                             widget.user.email = myController4.text;
->>>>>>> dba11b974018d80ca96b2b4170d44b0f1309dbe4
                             setState(() {
                               isEditable = false;
                             });
@@ -256,69 +247,5 @@ class _ProfilePageState extends State<ProfilePage> {
                 borderSide: BorderSide.none)),
       ),
     );
-  }
-
-  Future<Profiles> listconn() async {
-    var settings = new ConnectionSettings(
-        host: '10.0.2.2',
-        port: 3306,
-        user: 'root',
-        password: 'gbl',
-        db: 'lentonn1_pexicom');
-    var conn = await MySqlConnection.connect(settings);
-
-    var userId = widget.user.id;
-    print(userId);
-
-    var results = await conn.query(
-        'select id, enom, eville, eprovince, epays, tele, esite, secteur, eadresse from profil_a where uid = ?',
-        [userId]);
-
-    /*print("hahha");
-    print(results.isEmpty);*/
-
-    if (results.isNotEmpty) {
-      Profiles p = new Profiles(
-        uid: results.single[0].toString(),
-        enom: results.single[1].toString(),
-        eville: results.single[2].toString(),
-        eprovince: results.single[3].toString(),
-        epays: results.single[4].toString(),
-        tele: results.single[5].toString(),
-        esite: results.single[6].toString(),
-        secteur: results.single[7].toString(),
-        eadresse: results.single[8].toString(),
-      );
-      print(p.uid);
-
-      return p;
-    } else {
-      print("here?");
-      Profiles p = new Profiles.init();
-
-      return p;
-    }
-  }
-
-  Future save() async {
-    var settings = new ConnectionSettings(
-        host: '10.0.2.2',
-        port: 3306,
-        user: 'root',
-        password: 'gbl',
-        db: 'lentonn1_pexicom');
-    var conn = await MySqlConnection.connect(settings);
-
-    var userId = widget.user.id;
-    print(userId);
-
-    await conn.query(
-        'update profil_a set esite=?,tele=?,eadresse=? where uid=?',
-        [myController7.text, myController3.text, myController5.text, userId]);
-
-    await conn.query('update connexion_u set  nom=?, email=?  where id=?',
-        [myController1.text, myController4.text, userId]);
-    /*await conn.query('update connexion_u set  email=?  where id=?',
-        [myController4.text, userId]);*/
   }
 }

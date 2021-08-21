@@ -1,13 +1,12 @@
-import 'package:app/history_page.dart';
-import 'package:app/home_page.dart';
+import 'package:app/page/history_page.dart';
+import 'package:app/page/home_page.dart';
 
 import 'package:app/main.dart';
-import 'package:app/profile_page.dart';
-import 'package:hexcolor/hexcolor.dart';
+import 'package:app/page/profile_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'models/Colorstheme.dart';
 import 'models/User.dart';
-import 'package:app/stats_page.dart';
+import 'package:app/page/stats_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
