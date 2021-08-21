@@ -19,7 +19,7 @@ class apiService {
 
     final response = await http.post(
       Uri.parse(url + "getUserbyID"),
-      body: {"id": id},
+      body: {"uid": id},
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },

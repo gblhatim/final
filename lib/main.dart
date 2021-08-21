@@ -72,10 +72,10 @@ class _MyHomePageState extends State<MyHomePage> {
       uid = value.getString("UID") ?? "";
       // ignore: unnecessary_null_comparison
 
-      apiService d = new apiService();
-
       if (uid != "") {
-        d.getUserbyID(uid).then((value) {
+        print("uid : " + uid);
+
+        apiService().getUserbyID(uid).then((value) {
           u = value;
           setState(() {});
         });
