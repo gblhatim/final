@@ -1,3 +1,4 @@
+import 'package:app/apiService.dart';
 import 'package:app/models/Colorstheme.dart';
 import 'package:app/profile_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,7 +16,7 @@ class StatsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: statData(),
+        future: apiService().getstat(user.id),
         builder: (context, AsyncSnapshot<List<String>> snapshot) {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
