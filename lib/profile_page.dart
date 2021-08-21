@@ -118,7 +118,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                 myController7.text,
                                 myController5.text,
                                 myController3.text);
+<<<<<<< HEAD
 
+=======
+                            widget.user.nom = myController1.text;
+                            widget.user.email = myController4.text;
+>>>>>>> dba11b974018d80ca96b2b4170d44b0f1309dbe4
                             setState(() {
                               isEditable = false;
                             });
