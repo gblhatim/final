@@ -120,6 +120,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                 myController3.text);
                             widget.user.nom = myController1.text;
                             widget.user.email = myController4.text;
+                            setState(() {
+                              isEditable = false;
+                            });
                           },
                           color: Colorth.cyellow, //("#0072ff"),
                           child: Center(
