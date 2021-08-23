@@ -24,9 +24,9 @@ before_deploy:
   - popd
 deploy:
   provider: releases
-  api_key:
-    secure: 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
+  token: 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
   file: build/ios/iphoneos/app.ipa
-  skip_cleanup: true #important or your built app would be deleted
+  cleanup: false #important or your built app would be deleted
+  keep_history: true
   on:
     repo: https://github.com/Ainhajar-Ibrahim/avisgo
